@@ -37,7 +37,9 @@ textarea{min-height:96px;resize:vertical}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0}
 .row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px}
 .count{color:var(--mute);font-size:14px}
-.post .meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;margin-bottom:6px}
+.post .meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:6px}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--pink);color:#0A0A0A;display:inline-grid;place-items:center;font-weight:700}
+.fresh{border-color:var(--pink)}
 .post .name{font-weight:700}
 .post .school{color:var(--pink);font-size:14px}
 .post .time{color:var(--mute);font-size:14px}
@@ -90,6 +92,7 @@ footer .wrap{padding-bottom:40px}
       <label for="password">Password</label>
       <input id="password" type="password" autocomplete="current-password" placeholder="At least 8 characters">
       <div id="authMsg" class="msg" hidden role="alert"></div>
+      <p style="margin:10px 0 0"><button class="link" id="forgotBtn" type="button">Forgot password?</button></p>
       <p style="margin-top:20px"><button class="btn primary" id="authBtn" style="width:100%">Create account</button></p>
     </div>
   </section>
@@ -98,18 +101,20 @@ footer .wrap{padding-bottom:40px}
     <div class="card">
       <label for="body" style="margin-top:0">What's happening on campus?</label>
       <textarea id="body" maxlength="500" placeholder="Tell us what's on your mind..."></textarea>
-      <div class="row">
+      <div class="row" style="flex-wrap:wrap">
+        <label style="margin:0;display:flex;gap:8px;align-items:center"><input type="checkbox" id="anon" style="width:20px;min-height:20px"><span class="count" id="anonText">Anonymous</span></label>
         <span class="count" id="count">0 / 500</span>
         <button class="btn primary" id="postBtn">Post</button>
       </div>
       <div id="postMsg" class="msg" hidden role="alert"></div>
     </div>
     <p class="rules">Campus gist, funny moments, tough days, all of it. Say it your way.</p>
+    <div class="tabs" style="margin-top:16px"><button class="btn" id="tabAll" type="button" aria-selected="true">All students</button><button class="btn" id="tabSchool" type="button" aria-selected="false">My school</button></div>
     <div id="feed" aria-live="polite"></div>
   </section>
 </main>
 
-<footer><div class="wrap"><button class="link" id="termsBtn" type="button">Terms and guidelines</button><button class="link" id="blockedBtn" type="button" hidden>Blocked users</button></div></footer>
+<footer><div class="wrap"><button class="link" id="termsBtn" type="button">Terms and guidelines</button><button class="link" id="aliasBtn" type="button" hidden>My alias</button><button class="link" id="blockedBtn" type="button" hidden>Blocked users</button></div></footer>
 <dialog id="dlg"><div id="dlgBody"></div><p style="text-align:right;margin-bottom:0"><button class="btn" id="dlgClose" type="button">Close</button></p></dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -227,7 +232,46 @@ function fillSchools() {
   sel.onchange = () => { $('otherSchool').hidden = sel.value !== '__other'; };
 }
 
+
+const ADJ = ['Funny','Sour','Sleepy','Spicy','Brave','Dizzy','Cheeky','Gentle','Wild','Lazy','Proud','Jolly','Mighty','Shy','Sneaky','Fancy','Grumpy','Happy','Clever','Noisy','Calm','Bouncy','Salty','Sunny','Rowdy','Chilled','Hungry','Cool','Silent','Lucky','Sabi','Gbam','Sharp','Smooth','Zesty','Ginger','Wavy','Fresh','Bold','Cosmic','Royal','Tipsy','Jazzy','Mellow','Peppery','Crispy','Soggy','Dapper','Zippy','Lit'];
+const THING = [['Pineapple','🍍'],['Orange','🍊'],['Jollof','🍛'],['Suya','🍢'],['Plantain','🍌'],['Mango','🥭'],['Pepper','🌶️'],['Goat','🐐'],['Tortoise','🐢'],['Parrot','🦜'],['Lion','🦁'],['Owl','🦉'],['Agama','🦎'],['Okada','🏍️'],['Danfo','🚌'],['Drum','🥁'],['Lantern','🏮'],['Coconut','🥥'],['Zobo','🍹'],['Akara','🧆'],['Cactus','🌵'],['Rocket','🚀'],['Kite','🪁'],['Sneaker','👟'],['Umbrella','☂️'],['Moon','🌙'],['Thunder','⚡'],['Broom','🧹'],['Compass','🧭'],
+['Elephant','🐘'],['Giraffe','🦒'],['Hippo','🦛'],['Crocodile','🐊'],['Monkey','🐒'],['Eagle','🦅'],['Flamingo','🦩'],['Rhino','🦏'],['Leopard','🐆'],['Zebra','🦓'],['Crab','🦀'],['Octopus','🐙'],['Panda','🐼'],
+['Shawarma','🌯'],['Puff-Puff','🍩'],['Chin-Chin','🍪'],['Meatpie','🥧'],['Watermelon','🍉'],['Groundnut','🥜'],['Yam','🍠'],['Moimoi','🍲'],['Eba','🥣'],['Egusi','🥬'],['Ice Cream','🍦'],['Pizza','🍕'],
+['Keke','🛺'],['Gele','👒'],['Ankara','🧵'],['Agbada','🧥'],['Wahala','😅'],['Gist','💬'],['Vibes','✨'],['Owambe','🎉'],['Traffic','🚦'],['Generator','🔌']];
+function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function aliasFor(id, seed) {
+  const h = hash(String(id) + ':' + (seed || 0));
+  const t = THING[(h >>> 5) % THING.length];
+  return { name: ADJ[h % ADJ.length] + ' ' + t[0], emoji: t[1], hue: (h >>> 11) % 360 };
+}
+function setAnonLabel() {
+  if (!me) return;
+  const a = aliasFor(me.id, myProf && myProf.alias_seed);
+  $('anonText').textContent = 'Post as ' + a.emoji + ' ' + a.name;
+}
+function aliasDlg() {
+  const nodes = [el('h2', { textContent: 'Choose your alias', style: 'margin-top:0' }), el('p', { className: 'count', textContent: 'Your alias stays the same on all your anonymous posts until you change it. Changing it updates your old anonymous posts too.' })];
+  for (let i = 0; i < 3; i++) {
+    const seed = Math.floor(Math.random() * 1e9) + 1;
+    const a = aliasFor(me.id, seed);
+    const b = el('button', { className: 'btn', type: 'button', textContent: a.emoji + ' ' + a.name, style: 'width:100%;margin-bottom:8px' });
+    b.onclick = async () => {
+      const { error } = await sb.from('profiles').update({ alias_seed: seed }).eq('id', me.id);
+      if (error) return alert('Could not save: ' + error.message);
+      await loadMe(); $('dlg').close(); loadFeed();
+    };
+    nodes.push(b);
+  }
+  openDlg(nodes);
+}
 let blocked = new Set();
+let scope = 'all';
+let myProf = null;
+async function loadMe() {
+  const { data } = await sb.from('profiles').select('username, school, alias_seed').eq('id', me.id).single();
+  myProf = data;
+  setAnonLabel();
+}
 async function loadBlocks() {
   const { data } = await sb.from('blocks').select('blocked_id');
   blocked = new Set((data || []).map((r) => r.blocked_id));
@@ -289,7 +333,7 @@ async function openComments(p, box) {
 }
 
 async function showBlocked() {
-  const { data } = await sb.from('blocks').select('blocked_id, profiles!blocks_blocked_id_fkey(username)');
+  const { data } = await sb.from('blocks').select('blocked_id');
   const nodes = [el('h2', { textContent: 'Blocked users', style: 'margin-top:0' })];
   if (!data || !data.length) nodes.push(el('p', { className: 'count', textContent: 'You have not blocked anyone.' }));
   (data || []).forEach((r) => {
@@ -298,7 +342,7 @@ async function showBlocked() {
       await sb.from('blocks').delete().eq('blocked_id', r.blocked_id).eq('blocker_id', me.id);
       $('dlg').close(); loadFeed();
     };
-    nodes.push(el('div', { className: 'row' }, [el('span', { textContent: (r.profiles && r.profiles.username) || 'user' }), b]));
+    nodes.push(el('div', { className: 'row' }, [el('span', { textContent: 'Blocked user ' + r.blocked_id.slice(0, 4) }), b]));
   });
   openDlg(nodes);
 }
@@ -315,13 +359,18 @@ function showTerms() {
 $('dlgClose').onclick = () => $('dlg').close();
 $('termsBtn').onclick = showTerms;
 $('blockedBtn').onclick = showBlocked;
+$('aliasBtn').onclick = aliasDlg;
 
 function renderPost(p) {
   const likes = p.likes || [];
   const liked = likes.some((l) => l.user_id === me.id);
   const prof = p.profiles || {};
+  const al = aliasFor(p.user_id, prof.alias_seed);
+  const avatarEl = el('span', { className: 'avatar', textContent: p.anonymous ? al.emoji : (prof.username || 'S')[0].toUpperCase() });
+  if (p.anonymous) avatarEl.style.background = 'hsl(' + al.hue + ' 70% 75%)';
   const meta = el('div', { className: 'meta' }, [
-    el('span', { className: 'name', textContent: prof.username || 'student' }),
+    avatarEl,
+    el('span', { className: 'name', textContent: p.anonymous ? al.name : (prof.username || 'student') }),
     el('span', { className: 'school', textContent: prof.school || '' }),
     el('span', { className: 'time', textContent: ago(p.created_at) })
   ]);
@@ -337,9 +386,14 @@ function renderPost(p) {
   };
   const nC = (p.comments && p.comments[0] && p.comments[0].count) || 0;
   const cBtn = el('button', { className: 'like', type: 'button' }, [document.createTextNode('💬 ' + nC)]);
+  const shareBtn = el('button', { className: 'link', type: 'button', textContent: 'Share' });
+  shareBtn.onclick = () => {
+    if (navigator.share) navigator.share({ title: 'Klapbac', text: p.body.slice(0, 140), url: location.origin }).catch(() => {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(location.origin).then(() => alert('Link copied'));
+  };
   const cbox = el('div', { className: 'cbox', hidden: true });
   cBtn.onclick = () => { cbox.hidden = !cbox.hidden; if (!cbox.hidden) openComments(p, cbox); };
-  const actions = el('div', { className: 'actions' }, [likeBtn, cBtn]);
+  const actions = el('div', { className: 'actions' }, [likeBtn, cBtn, shareBtn]);
   if (p.user_id === me.id) {
     const del = el('button', { className: 'link', type: 'button', textContent: 'Delete' });
     del.onclick = async () => {
@@ -365,9 +419,11 @@ function renderPost(p) {
 async function loadFeed() {
   if (!me) return;
   await loadBlocks();
-  const { data, error } = await sb.from('posts')
-    .select('id, body, created_at, user_id, profiles(username, school), likes(user_id), comments(count)')
+  let q = sb.from('posts')
+    .select('id, body, created_at, user_id, anonymous, profiles!inner(username, school, alias_seed), likes(user_id), comments(count)')
     .order('created_at', { ascending: false }).limit(50);
+  if (scope === 'school' && myProf && myProf.school) q = q.eq('profiles.school', myProf.school);
+  const { data, error } = await q;
   const feed = $('feed');
   feed.replaceChildren();
   if (error) return feed.append(el('p', { className: 'empty', textContent: 'Could not load posts: ' + error.message }));
@@ -383,7 +439,7 @@ async function publish() {
   if (!body) return show(msg, 'Write something first.');
   $('postBtn').disabled = true;
   $('postBtn').textContent = 'Posting...';
-  const { error } = await sb.from('posts').insert({ body });
+  const { error } = await sb.from('posts').insert({ body, anonymous: $('anon').checked });
   $('postBtn').disabled = false;
   $('postBtn').textContent = 'Post';
   if (error) return show(msg, 'Could not post: ' + error.message);
@@ -391,7 +447,10 @@ async function publish() {
   $('count').textContent = '0 / 500';
   show(msg, 'Posted!', true);
   setTimeout(() => show(msg, ''), 2500);
+  $('anon').checked = false;
   await loadFeed();
+  const first = document.querySelector('#feed .post');
+  if (first) first.classList.add('fresh');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -401,8 +460,10 @@ function render(session) {
   $('appView').hidden = !me;
   $('logoutBtn').hidden = !me;
   $('blockedBtn').hidden = !me;
+  $('aliasBtn').hidden = !me;
+  if (me) setAnonLabel();
   clearInterval(timer);
-  if (me) { loadFeed(); timer = setInterval(loadFeed, 30000); }
+  if (me) { loadMe().then(loadFeed); timer = setInterval(loadFeed, 30000); }
 }
 
 $('username').addEventListener('input', () => { $('username').value = $('username').value.replace(/\s+/g, '_').replace(/[^A-Za-z0-9_]/g, ''); });
@@ -415,7 +476,34 @@ $('body').addEventListener('input', () => { $('count').textContent = $('body').v
 $('logoutBtn').onclick = () => sb.auth.signOut();
 
 fillSchools();
-sb.auth.onAuthStateChange((_event, session) => render(session));
+function setScope(v) {
+  scope = v;
+  $('tabAll').setAttribute('aria-selected', v === 'all');
+  $('tabSchool').setAttribute('aria-selected', v === 'school');
+  loadFeed();
+}
+$('tabAll').onclick = () => setScope('all');
+$('tabSchool').onclick = () => setScope('school');
+$('forgotBtn').onclick = async () => {
+  const email = $('email').value.trim();
+  const msg = $('authMsg');
+  if (!email) return show(msg, 'Type your email above first, then tap Forgot password.');
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin });
+  show(msg, error ? error.message : 'Check your email for a link to reset your password.', !error);
+};
+function recoveryDlg() {
+  const input = el('input', { type: 'password', placeholder: 'New password (8+ characters)' });
+  const msg = el('div', { className: 'msg', hidden: true });
+  const go = el('button', { className: 'btn primary', type: 'button', textContent: 'Save new password' });
+  go.onclick = async () => {
+    if (input.value.length < 8) return show(msg, 'Use at least 8 characters.');
+    const { error } = await sb.auth.updateUser({ password: input.value });
+    if (error) return show(msg, error.message);
+    show(msg, 'Password updated. You are logged in.', true);
+  };
+  openDlg([el('h2', { textContent: 'Set a new password', style: 'margin-top:0' }), input, msg, el('p', {}, [go])]);
+}
+sb.auth.onAuthStateChange((event, session) => { render(session); if (event === 'PASSWORD_RECOVERY') recoveryDlg(); });
 sb.auth.getSession().then(({ data }) => render(data.session));
 </script>
 </body>
