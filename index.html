@@ -1,0 +1,1250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<title>Klapbac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0A;--card:#151515;--line:#262626;--text:#F5F5F5;--mute:#A3A3A3;--pink:#FF3D6E;--pink-d:#E02A5A}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;font-size:16px;line-height:1.45}
+body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px 80px}
+header{position:sticky;top:0;z-index:5;background:rgba(10,10,10,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;padding:8px 16px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:20px;letter-spacing:-1px}
+.brand svg{width:26px;height:26px}
+.btn{min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:transparent;cursor:pointer;font-weight:500}
+.btn.primary{background:var(--pink);border-color:var(--pink);color:#0A0A0A;font-weight:700}
+.btn.primary:hover{background:var(--pink-d)}
+.btn:disabled{opacity:.5;cursor:default}
+h1{font-size:34px;line-height:1.1;letter-spacing:-1.5px;margin:32px 0 8px}
+.sub{color:var(--mute);margin:0 0 24px}
+.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tabs .btn{flex:1;white-space:nowrap;padding:0 8px}
+.tabs .btn[aria-selected="true"]{background:var(--text);color:#0A0A0A;border-color:var(--text);font-weight:700}
+label{display:block;font-weight:500;margin:14px 0 6px}
+input,select,textarea{width:100%;min-height:48px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card)}
+textarea{min-height:96px;resize:vertical}
+.msg{margin:14px 0 0;padding:12px 14px;border-radius:12px;background:#2A1017;border:1px solid #5A1E30;color:#FFB4C6}
+.msg.ok{background:#0F2A18;border-color:#1E5A33;color:#B4FFD0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px}
+.count{color:var(--mute);font-size:14px}
+.post .meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:6px}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--pink);color:#0A0A0A;display:inline-grid;place-items:center;font-weight:700}
+.fresh{border-color:var(--pink)}
+img.avatar{object-fit:cover}
+.post .name{font-weight:700}
+.post .school{color:var(--pink);font-size:14px}
+.post .time{color:var(--mute);font-size:14px}
+.post p{margin:0 0 12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.like{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:transparent;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.like[aria-pressed="true"]{border-color:var(--pink);color:var(--pink)}
+.link{background:none;border:0;color:var(--mute);cursor:pointer;min-height:44px;padding:0 10px;text-decoration:underline}
+.empty{color:var(--mute);text-align:center;padding:40px 0}
+.rules{color:var(--mute);font-size:14px;margin:0}
+.cbox{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.cmt{margin:0 0 12px}.cmt p{margin:2px 0;overflow-wrap:anywhere}.cmt .time{color:var(--mute);font-size:13px}
+.cform{display:flex;gap:8px}.cform input{flex:1}
+dialog{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:16px;max-width:480px;width:calc(100% - 32px)}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+footer .wrap{padding-bottom:110px}
+dialog{max-height:85vh;overflow:auto}
+.hbtns{display:flex;gap:2px}
+.ibtn{position:relative;width:44px;height:44px;border:0;background:transparent;color:var(--mute);cursor:pointer;display:grid;place-items:center;border-radius:50%}
+.ibtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ibtn.on{color:var(--pink)}
+#bellBtn{width:48px}
+#bellBtn svg{width:28px;height:24px;stroke-width:2.4}
+#bellBtn .c{stroke:var(--pink)}
+#bellBtn.on{color:var(--text)}
+#bellBtn.on .a1,#bellBtn.on .a2{stroke:var(--pink)}
+@media (prefers-reduced-motion:no-preference){#bellBtn.on .a1{animation:ping 1.6s infinite}#bellBtn.on .a2{animation:ping 1.6s .25s infinite}}
+@keyframes ping{0%,100%{opacity:1}50%{opacity:.25}}
+.ab{display:inline-flex;align-items:center;gap:6px;min-height:40px;min-width:40px;justify-content:center;padding:0 8px;border:0;background:transparent;color:var(--mute);cursor:pointer;border-radius:20px;font:500 14px 'Space Grotesk',sans-serif}
+.ab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;transition:transform .12s}
+.ab[aria-pressed=true]{color:var(--pink)}.ab[aria-pressed=true] svg.on{fill:currentColor}.ab:active svg{transform:scale(.8)}
+.actions{flex-wrap:wrap}
+#postBtn{background:linear-gradient(135deg,#FF3D6E,#FF8A3D);border:0;color:#0A0A0A;font-weight:700;font-size:17px;min-height:48px;padding:0 30px;box-shadow:0 6px 18px rgba(255,61,110,.35)}
+#postBtn:active{transform:scale(.97)}#postBtn:disabled{filter:grayscale(.85);box-shadow:none}
+.badge{position:absolute;top:4px;right:2px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--pink);color:#0A0A0A;font:700 10px/16px 'Space Grotesk',sans-serif;text-align:center;font-style:normal}
+#nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:rgba(10,10,10,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+#nav button{flex:1;min-height:56px;border:0;background:transparent;color:var(--mute);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;cursor:pointer}
+#nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#nav button[aria-current="true"]{color:var(--pink)}
+#nav .plus span.pl{width:44px;height:36px;border-radius:18px;background:var(--pink);color:#0A0A0A;display:grid;place-items:center}
+#nav .plus svg{stroke:#0A0A0A}
+.tick{display:inline-block;width:18px;height:18px;margin-left:4px;vertical-align:-3px}.tick svg{width:100%;height:100%;display:block}
+.mrow{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:52px;padding:0 16px;border:1px solid var(--line);border-radius:14px;background:var(--card);margin-bottom:8px;text-align:left;cursor:pointer}
+.chip{display:inline-block;margin:0 8px 8px 0;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--pink);cursor:pointer}
+.pollopt{margin-top:8px}
+.stats div{cursor:pointer}
+a.link{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;color:var(--mute);text-decoration:underline}
+.phead{display:flex;gap:16px;align-items:center;margin:20px 0 12px}.phead h1{margin:0;font-size:26px;letter-spacing:-.5px}
+.stats{display:flex;gap:24px;margin:8px 0}.stats b{display:block;font-size:20px}.stats span{color:var(--mute);font-size:14px}
+.school{color:var(--pink);margin:4px 0}
+.cbox .cform{margin-top:8px}
+.hint{color:var(--mute);font-size:14px;margin:6px 0 0}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:no-preference){.btn,.like{transition:background .15s,border-color .15s}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="kg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF3D6E"/><stop offset="1" stop-color="#FF8A3D"/></linearGradient></defs></svg>
+<header><div class="wrap">
+  <div class="brand">
+    <svg viewBox="0 0 100 100" role="img" aria-label="Klapbac logo"><path d="M72 28 A32 32 0 1 0 72 72" fill="none" stroke="#FF3D6E" stroke-width="14" stroke-linecap="round"/><circle cx="50" cy="50" r="8" fill="#F5F5F5"/></svg>
+    <span>klapbac</span>
+  </div>
+  <div class="hbtns">
+    <button class="ibtn" id="bellBtn" type="button" aria-label="Echoes" hidden><svg viewBox="0 0 28 24"><path class="c" d="M12.8 8.1A5.4 5.4 0 1 0 12.8 15.9"/><circle cx="9.2" cy="12" r="1.9" fill="currentColor" stroke="none"/><path class="a1" d="M17.4 8.4a5 5 0 0 1 0 7.2"/><path class="a2" d="M21.2 5.4a9.2 9.2 0 0 1 0 13.2"/></svg><i class="badge" id="bellBadge" hidden></i></button>
+    <button class="ibtn" id="dmBtn" type="button" aria-label="Messages" hidden><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg></button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <section id="authView" hidden>
+    <h1>Say it. Loud.</h1>
+    <p class="sub">The student voice, out loud. Sign up with your email and pick a username.</p>
+    <div class="tabs" role="tablist">
+      <button class="btn" role="tab" id="tabSignup" aria-selected="true">Sign up</button>
+      <button class="btn" role="tab" id="tabLogin" aria-selected="false">Log in</button>
+    </div>
+    <div id="authForm">
+      <div id="signupOnly">
+        <label for="username">Username</label>
+        <input id="username" autocomplete="username" maxlength="20" placeholder="e.g. campus_voice">
+        <p class="hint">3 to 20 characters. Letters, numbers and underscores only, no spaces. Example: Ozioma_Creator</p>
+        <label for="school">Your school</label>
+        <select id="school"></select>
+        <input id="otherSchool" maxlength="80" placeholder="Type your school's name" hidden style="margin-top:8px">
+        <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;margin-top:16px"><input type="checkbox" id="agree" style="width:22px;min-height:22px;margin-top:2px"><span>I am 16 or older. If I am under 18, my parent or guardian has agreed to me using Klapbac. I agree to the <a href="terms.html#terms" target="_blank" rel="noopener" style="color:var(--pink)">Terms</a> and <a href="terms.html#privacy" target="_blank" rel="noopener" style="color:var(--pink)">Privacy Policy</a>.</span></label>
+      </div>
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
+      <label for="password">Password</label>
+      <div style="position:relative"><input id="password" type="password" autocomplete="current-password" placeholder="At least 8 characters" style="padding-right:52px"><button type="button" id="eyeBtn" class="ibtn" aria-label="Show password" style="position:absolute;right:2px;top:2px"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+      <div id="authMsg" class="msg" hidden role="alert"></div>
+      <p style="margin:10px 0 0"><button class="link" id="forgotBtn" type="button">Forgot password?</button></p>
+      <p style="margin-top:20px"><button class="btn primary" id="authBtn" style="width:100%">Create account</button></p>
+    </div>
+  </section>
+
+  <section id="appView" hidden>
+    <div class="card">
+      <label for="body" style="margin-top:0">What's happening on campus?</label>
+      <textarea id="body" maxlength="500" placeholder="Tell us what's on your mind..."></textarea>
+      <button class="link" id="pollToggle" type="button" style="padding:0">+ Add poll</button>
+      <div id="pollBox" hidden><input class="pollopt" maxlength="40" placeholder="Option 1"><input class="pollopt" maxlength="40" placeholder="Option 2"><input class="pollopt" maxlength="40" placeholder="Option 3 (optional)"><input class="pollopt" maxlength="40" placeholder="Option 4 (optional)"></div>
+      <div class="row" style="flex-wrap:wrap">
+        <label style="margin:0;display:flex;gap:8px;align-items:center"><input type="checkbox" id="anon" style="width:20px;min-height:20px"><span class="count" id="anonText">Anonymous</span></label>
+        <span class="count" id="count">0 / 500</span>
+        <button class="btn primary" id="postBtn">Klap</button>
+      </div>
+      <div id="postMsg" class="msg" hidden role="alert"></div>
+    </div>
+    <p class="rules">Campus gist, funny moments, tough days, all of it. Say it your way.</p>
+    <div id="campusNote" class="msg ok" hidden>Jobs and internships, past questions and the marketplace are coming in the next update.</div>
+    <div class="tabs" style="margin-top:16px"><button class="btn" id="tabAll" type="button" aria-selected="true">All students</button><button class="btn" id="tabSchool" type="button" aria-selected="false">My school</button><button class="btn" id="tabFollowing" type="button" aria-selected="false">Following</button></div>
+    <div id="feed" aria-live="polite"></div>
+  </section>
+
+  <section id="profileView" hidden>
+    <p><button class="link" id="backBtn" type="button">&larr; Back</button></p>
+    <div class="phead"><div id="pAvatar"></div><div><h1 id="pName"></h1><div class="count" id="pUser"></div></div></div>
+    <div class="stats"><div><b id="pPosts">0</b><span>Klaps</span></div><div><b id="pFollowers">0</b><span>Followers</span></div><div><b id="pFollowing">0</b><span>Following</span></div></div>
+    <p class="school" id="pSchool"></p>
+    <p id="pBio" style="white-space:pre-wrap;overflow-wrap:anywhere"></p>
+    <p id="pActions"></p>
+    <div id="pFeed"></div>
+  </section>
+
+  <section id="searchView" hidden>
+    <input id="searchBox" type="search" placeholder="Search people, klaps, #tags" maxlength="40" style="margin:16px 0 12px">
+    <div id="trendBox"></div>
+    <div id="searchOut"></div>
+  </section>
+
+  <section id="meView" hidden>
+    <h1 style="margin-top:20px">Me</h1>
+    <div id="meList"></div>
+    <button id="logoutBtn" type="button" hidden></button>
+  </section>
+</main>
+
+<footer><div class="wrap"><button class="link" id="termsBtn" type="button">Guidelines</button><a class="link" href="terms.html#terms">Terms</a><a class="link" href="terms.html#privacy">Privacy</a><button class="link" id="profileBtn" type="button" hidden>Edit profile</button><button class="link" id="aliasBtn" type="button" hidden>My alias</button><button class="link" id="blockedBtn" type="button" hidden>Blocked users</button></div></footer>
+<nav id="nav" aria-label="Main" hidden>
+  <button type="button" data-tab="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span data-i="home">Home</span></button>
+  <button type="button" data-tab="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span data-i="search">Search</span></button>
+  <button type="button" data-tab="plus" class="plus" aria-label="New klap"><span class="pl"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></button>
+  <button type="button" data-tab="campus"><svg viewBox="0 0 24 24"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5"/></svg><span data-i="campus">Campus</span></button>
+  <button type="button" data-tab="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-i="me">Me</span></button>
+</nav>
+<dialog id="dlg"><div id="dlgBody"></div><p style="text-align:right;margin-bottom:0"><button class="btn" id="dlgClose" type="button">Close</button></p></dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://gmbjodvbyfuuoyqstwca.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_YtMEQhPhhxliNFkRztUutA_l7vLhhpv';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = (id) => document.getElementById(id);
+let me = null;
+let mode = 'signup';
+let timer = null;
+
+function show(el, text, ok) {
+  el.textContent = text;
+  el.hidden = !text;
+  el.classList.toggle('ok', !!ok);
+}
+
+function ago(iso) {
+  const s = Math.max(1, Math.floor((Date.now() - new Date(iso).getTime()) / 1000));
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s / 60) + 'm ago';
+  if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+  return Math.floor(s / 86400) + 'd ago';
+}
+
+function setMode(m) {
+  mode = m;
+  $('tabSignup').setAttribute('aria-selected', m === 'signup');
+  $('tabLogin').setAttribute('aria-selected', m === 'login');
+  $('signupOnly').hidden = m !== 'signup';
+  $('authBtn').textContent = m === 'signup' ? 'Create account' : 'Log in';
+  $('password').autocomplete = m === 'signup' ? 'new-password' : 'current-password';
+  show($('authMsg'), '');
+}
+
+async function submitAuth() {
+  const email = $('email').value.trim();
+  const password = $('password').value;
+  const msg = $('authMsg');
+  show(msg, '');
+  if (!email || password.length < 8) return show(msg, 'Enter your email and a password of at least 8 characters.');
+  $('authBtn').disabled = true;
+  try {
+    if (mode === 'signup') {
+      const username = $('username').value.trim();
+      let school = $('school').value;
+      if (school === '__other') school = $('otherSchool').value.trim();
+      if (!/^[A-Za-z0-9_]{3,20}$/.test(username)) return show(msg, 'Username must be 3 to 20 characters: letters, numbers or underscores only, no spaces. Example: Ozioma_Creator');
+      if (school.length < 2) return show(msg, 'Select your school, or type its name.');
+      if (!$('agree').checked) return show(msg, 'Please confirm you are 16 or older (with parent or guardian agreement if under 18) and accept the Terms and Privacy Policy.');
+      const { data, error } = await sb.auth.signUp({ email, password, options: { data: { username, school } } });
+      if (error) return show(msg, /database/i.test(error.message) ? 'That username is taken. Try another.' : error.message);
+      if (!data.session) show(msg, 'Account created. Check your email to confirm, then log in.', true);
+    } else {
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      if (error) return show(msg, 'Wrong email or password.');
+    }
+  } catch (e) {
+    show(msg, 'Network problem. Check your connection and try again.');
+  } finally {
+    $('authBtn').disabled = false;
+  }
+}
+
+function el(tag, props, kids) {
+  const n = document.createElement(tag);
+  Object.assign(n, props || {});
+  (kids || []).forEach((k) => n.append(k));
+  return n;
+}
+
+
+const SCHOOLS = [
+'Abubakar Tafawa Balewa University, Bauchi (ATBU)','Ahmadu Bello University, Zaria (ABU)','Bayero University, Kano (BUK)',
+'Federal University of Technology, Akure (FUTA)','Federal University of Technology, Minna (FUTMINNA)','Federal University of Technology, Owerri (FUTO)',
+'Federal University, Oye-Ekiti (FUOYE)','Federal University, Lokoja','Federal University, Lafia','Federal University, Dutse','Federal University, Gusau',
+'Federal University, Kashere','Federal University, Wukari','Federal University, Birnin Kebbi','Federal University, Dutsin-Ma','Federal University, Otuoke',
+'Federal University, Ndufu-Alike Ikwo (FUNAI)','Federal University, Gashua','Federal University of Agriculture, Abeokuta (FUNAAB)',
+'Federal University of Agriculture, Makurdi (FUAM)','Michael Okpara University of Agriculture, Umudike (MOUAU)',
+'Federal University of Petroleum Resources, Effurun (FUPRE)','Nnamdi Azikiwe University, Awka (UNIZIK)','Obafemi Awolowo University, Ile-Ife (OAU)',
+'University of Abuja (UNIABUJA)','University of Benin (UNIBEN)','University of Calabar (UNICAL)','University of Ibadan (UI)','University of Ilorin (UNILORIN)',
+'University of Jos (UNIJOS)','University of Lagos (UNILAG)','University of Maiduguri (UNIMAID)','University of Nigeria, Nsukka (UNN)',
+'University of Port Harcourt (UNIPORT)','University of Uyo (UNIUYO)','Usmanu Danfodiyo University, Sokoto (UDUSOK)','Modibbo Adama University, Yola',
+'Nigerian Defence Academy, Kaduna','National Open University of Nigeria (NOUN)',
+'Lagos State University (LASU)','Lagos State University of Science and Technology (LASUSTECH)','Olabisi Onabanjo University, Ago-Iwoye (OOU)',
+'Ambrose Alli University, Ekpoma (AAU)','Delta State University, Abraka (DELSU)','Rivers State University','Enugu State University of Science and Technology (ESUT)',
+'Abia State University, Uturu (ABSU)','Imo State University, Owerri (IMSU)','Ebonyi State University, Abakaliki (EBSU)',
+'Chukwuemeka Odumegwu Ojukwu University, Uli (COOU)','Akwa Ibom State University (AKSU)','Cross River University of Technology (CRUTECH)',
+'Benue State University, Makurdi (BSU)','Prince Abubakar Audu University, Anyigba','Kwara State University, Malete (KWASU)','Ekiti State University, Ado-Ekiti (EKSU)',
+'Osun State University (UNIOSUN)','Ladoke Akintola University of Technology, Ogbomoso (LAUTECH)','Adekunle Ajasin University, Akungba (AAUA)',
+'Tai Solarin University of Education, Ijagun','Niger Delta University, Yenagoa (NDU)','Edo State University, Iyamho (EDSU)','Plateau State University, Bokkos',
+'Nasarawa State University, Keffi (NSUK)','Kaduna State University (KASU)','Yusuf Maitama Sule University, Kano','Sokoto State University','Bauchi State University, Gadau',
+'Gombe State University','Taraba State University, Jalingo','Ibrahim Badamasi Babangida University, Lapai (IBBU)','Kebbi State University of Science and Technology, Aliero',
+'Covenant University, Ota','Babcock University, Ilishan-Remo','Afe Babalola University, Ado-Ekiti (ABUAD)','Bowen University, Iwo','Redeemer\'s University, Ede',
+'Landmark University, Omu-Aran','Pan-Atlantic University, Lagos','American University of Nigeria, Yola (AUN)','Nile University of Nigeria, Abuja','Baze University, Abuja',
+'Bells University of Technology, Ota','Crawford University, Igbesa','Lead City University, Ibadan','Madonna University, Okija','Caleb University, Imota',
+'Veritas University, Abuja','Godfrey Okoye University, Enugu','Igbinedion University, Okada','Benson Idahosa University, Benin City','Wesley University, Ondo',
+'Achievers University, Owo','Ajayi Crowther University, Oyo','Augustine University, Ilara-Epe','Joseph Ayo Babalola University, Ikeji-Arakeji',
+'Mountain Top University, Ogun','Elizade University, Ilara-Mokin','Chrisland University, Abeokuta','Southwestern University, Okun-Owa','McPherson University, Seriki Sotayo',
+'Hallmark University, Ijebu-Itele','Oduduwa University, Ipetumodu','Rhema University, Aba','Salem University, Lokoja','Kings University, Odeomu','Novena University, Ogume',
+'Paul University, Awka','Tansian University, Umunya','Evangel University, Akaeze','Gregory University, Uturu','Samuel Adegboyega University, Ogwa','Fountain University, Osogbo',
+'Al-Hikmah University, Ilorin','Summit University, Offa','Anchor University, Lagos','Dominion University, Ibadan','Trinity University, Yaba','Thomas Adewumi University, Oko-Irese',
+'Admiralty University of Nigeria, Ibusa','Eko University of Medicine and Health Sciences','Wellspring University, Benin City','PAMO University of Medical Sciences, Port Harcourt',
+'Arthur Jarvis University, Akpabuyo','Clifford University, Owerrinta','Coal City University, Enugu','Bingham University, Karu','Skyline University, Kano','Kola Daisi University, Ibadan',
+'Precious Cornerstone University, Ibadan','Ahman Pategi University','Edwin Clark University, Kiagbodo','Maranatha University, Lagos','Nigerian British University, Asa',
+'Christopher University, Mowe','Mudiame University, Irrua','Greenfield University, Kasarami','Karl-Kumm University, Vom','Jewel University, Gombe','Lux Mundi University, Umuahia'
+];
+function fillSchools() {
+  const sel = $('school');
+  const list = Array.from(new Set(SCHOOLS)).sort((a, b) => a.localeCompare(b));
+  sel.append(el('option', { value: '', textContent: 'Select your school' }));
+  list.forEach((n) => sel.append(el('option', { value: n, textContent: n })));
+  sel.append(el('option', { value: '__other', textContent: 'My school is not listed' }));
+  sel.onchange = () => { $('otherSchool').hidden = sel.value !== '__other'; };
+}
+
+
+const ADJ = ['Funny','Sour','Sleepy','Spicy','Brave','Dizzy','Cheeky','Gentle','Wild','Lazy','Proud','Jolly','Mighty','Shy','Sneaky','Fancy','Grumpy','Happy','Clever','Noisy','Calm','Bouncy','Salty','Sunny','Rowdy','Chilled','Hungry','Cool','Silent','Lucky','Sabi','Gbam','Sharp','Smooth','Zesty','Ginger','Wavy','Fresh','Bold','Cosmic','Royal','Tipsy','Jazzy','Mellow','Peppery','Crispy','Soggy','Dapper','Zippy','Lit'];
+const THING = [['Pineapple','🍍'],['Orange','🍊'],['Jollof','🍛'],['Suya','🍢'],['Plantain','🍌'],['Mango','🥭'],['Pepper','🌶️'],['Goat','🐐'],['Tortoise','🐢'],['Parrot','🦜'],['Lion','🦁'],['Owl','🦉'],['Agama','🦎'],['Okada','🏍️'],['Danfo','🚌'],['Drum','🥁'],['Lantern','🏮'],['Coconut','🥥'],['Zobo','🍹'],['Akara','🧆'],['Cactus','🌵'],['Rocket','🚀'],['Kite','🪁'],['Sneaker','👟'],['Umbrella','☂️'],['Moon','🌙'],['Thunder','⚡'],['Broom','🧹'],['Compass','🧭'],
+['Elephant','🐘'],['Giraffe','🦒'],['Hippo','🦛'],['Crocodile','🐊'],['Monkey','🐒'],['Eagle','🦅'],['Flamingo','🦩'],['Rhino','🦏'],['Leopard','🐆'],['Zebra','🦓'],['Crab','🦀'],['Octopus','🐙'],['Panda','🐼'],
+['Shawarma','🌯'],['Puff-Puff','🍩'],['Chin-Chin','🍪'],['Meatpie','🥧'],['Watermelon','🍉'],['Groundnut','🥜'],['Yam','🍠'],['Moimoi','🍲'],['Eba','🥣'],['Egusi','🥬'],['Ice Cream','🍦'],['Pizza','🍕'],
+['Keke','🛺'],['Gele','👒'],['Ankara','🧵'],['Agbada','🧥'],['Wahala','😅'],['Gist','💬'],['Vibes','✨'],['Owambe','🎉'],['Traffic','🚦'],['Generator','🔌']];
+function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function aliasFor(id, seed) {
+  const h = hash(String(id) + ':' + (seed || 0));
+  const t = THING[(h >>> 5) % THING.length];
+  return { name: ADJ[h % ADJ.length] + ' ' + t[0], emoji: t[1], hue: (h >>> 11) % 360 };
+}
+function setAnonLabel() {
+  if (!me) return;
+  const a = aliasFor(myAliasId || me.id, myAliasSeed);
+  $('anonText').textContent = 'Klap as ' + a.emoji + ' ' + a.name;
+}
+function aliasDlg() {
+  const nodes = [el('h2', { textContent: 'Choose your alias', style: 'margin-top:0' }), el('p', { className: 'count', textContent: 'Your alias stays the same on all your anonymous posts until you change it. Changing it updates your old anonymous posts too.' })];
+  for (let i = 0; i < 3; i++) {
+    const seed = Math.floor(Math.random() * 1e9) + 1;
+    const a = aliasFor(myAliasId || me.id, seed);
+    const b = el('button', { className: 'btn', type: 'button', textContent: a.emoji + ' ' + a.name, style: 'width:100%;margin-bottom:8px' });
+    b.onclick = async () => {
+      if (!myAliasId) return alert('Anonymous mode is not ready yet. Refresh and try again.');
+      const { error } = await sb.from('profiles').update({ alias_seed: seed }).eq('id', myAliasId);
+      if (error) return alert('Could not save: ' + error.message);
+      await loadMe(); $('dlg').close(); loadFeed();
+    };
+    nodes.push(b);
+  }
+  openDlg(nodes);
+}
+let myAliasId = null, myAliasSeed = 0;
+const isMine = (id) => !!me && (id === me.id || id === myAliasId);
+let blocked = new Set();
+const POST_SEL = 'id, body, created_at, user_id, anonymous, hidden, poll_options, repost_of, profiles!posts_user_id_fkey!inner(username, display_name, school, alias_seed, avatar_url, bio, verified), likes!likes_post_id_fkey(user_id), comments!comments_post_id_fkey(count)';
+async function withOrig(list) {
+  const arr = (list || []).filter(Boolean);
+  const ids = [...new Set(arr.filter((p) => p.repost_of).map((p) => p.repost_of))];
+  if (!ids.length) return arr;
+  const { data } = await sb.from('posts').select('id, body, anonymous, user_id, profiles!posts_user_id_fkey(username, display_name, alias_seed, verified)').in('id', ids);
+  const m = {}; (data || []).forEach((o) => { m[o.id] = o; });
+  arr.forEach((p) => { if (p.repost_of) p.orig = m[p.repost_of] || null; });
+  return arr;
+}
+let feedLimit = 30;
+let scope = 'all';
+let profileOf = null;
+let myProf = null;
+async function loadMe() {
+  const { data } = await sb.from('profiles').select('username, display_name, school, alias_seed, avatar_url, bio, verified, is_admin, pinned_post_id, onboarded').eq('id', me.id).single();
+  myProf = data;
+  const { data: aid } = await sb.rpc('ensure_alias');
+  myAliasId = aid || null; myAliasSeed = 0;
+  if (myAliasId) { const { data: ap } = await sb.from('profiles').select('alias_seed').eq('id', myAliasId).maybeSingle(); myAliasSeed = ap ? ap.alias_seed : 0; }
+  setAnonLabel();
+}
+let mySaved = new Set(), myHiddenIds = new Set(), myMuted = [];
+async function loadBlocks() {
+  const [b, sv, h, m] = await Promise.all([
+    sb.from('blocks').select('blocked_id'), sb.from('bookmarks').select('post_id'),
+    sb.from('not_interested').select('post_id'), sb.from('muted_words').select('word')]);
+  blocked = new Set((b.data || []).map((r) => r.blocked_id));
+  mySaved = new Set((sv.data || []).map((r) => r.post_id));
+  myHiddenIds = new Set((h.data || []).map((r) => r.post_id));
+  myMuted = (m.data || []).map((r) => r.word.toLowerCase());
+}
+function isMuted(p) { const t0 = (p.body || '').toLowerCase(); return myMuted.some((w) => t0.includes(w)); }
+function openDlg(nodes) { $('dlgBody').replaceChildren(...nodes); $('dlg').showModal(); }
+
+function reportDlg(target) {
+  const sel = el('select');
+  ['Harassment or bullying', 'Threat or violence', 'Hate or discrimination', 'False information', 'Spam', 'Other']
+    .forEach((r) => sel.append(el('option', { value: r, textContent: r })));
+  const msg = el('div', { className: 'msg', hidden: true });
+  const send = el('button', { className: 'btn primary', type: 'button', textContent: 'Send report' });
+  send.onclick = async () => {
+    send.disabled = true;
+    const { error } = await sb.from('reports').insert({ ...target, reason: sel.value });
+    if (error) { show(msg, error.code === '23505' ? 'You already reported this.' : 'Could not send: ' + error.message); send.disabled = false; return; }
+    show(msg, 'Thanks. Your report was sent.', true);
+  };
+  openDlg([el('h2', { textContent: 'Report', style: 'margin-top:0' }), el('label', { textContent: 'Why are you reporting this?' }), sel, msg, el('p', {}, [send])]);
+}
+
+async function openComments(p, box) {
+  box.replaceChildren(el('p', { className: 'count', textContent: 'Loading...' }));
+  const { data, error } = await sb.from('comments')
+    .select('id, body, created_at, user_id, parent_id, profiles!comments_user_id_fkey(username, display_name, verified)')
+    .eq('post_id', p.id).order('created_at', { ascending: true });
+  box.replaceChildren();
+  if (error) return box.append(el('p', { className: 'count', textContent: 'Could not load comments: ' + error.message }));
+  const list = (data || []).filter((c) => !blocked.has(c.user_id));
+  let replyTo = null;
+  const input = el('input', { maxLength: 300, placeholder: 'Write a comment...', ariaLabel: 'Comment' });
+  const hint = el('p', { className: 'count', hidden: true, style: 'margin:8px 0 6px;cursor:pointer' });
+  hint.onclick = () => { replyTo = null; hint.hidden = true; input.value = ''; input.placeholder = 'Write a comment...'; };
+  const setReply = (c, top) => {
+    const nm = c.profiles ? c.profiles.username : 'student';
+    replyTo = { top: top.id, user: c.user_id };
+    hint.hidden = false; hint.textContent = 'Replying to @' + nm + ' (tap here to cancel)';
+    input.value = '@' + nm + ' '; input.focus();
+  };
+  const rowFor = (c, top) => {
+    const nm = c.profiles ? (c.profiles.display_name || c.profiles.username) : 'student';
+    const row = el('div', { className: 'cmt', style: c.parent_id ? 'margin-left:28px' : '' }, [
+      nameB(nm, c.profiles && c.profiles.verified), document.createTextNode(' '),
+      el('span', { className: 'time', textContent: ago(c.created_at) }),
+      el('p', { textContent: c.body })
+    ]);
+    const rb = el('button', { className: 'link', type: 'button', textContent: 'Reply' });
+    rb.onclick = () => setReply(c, top);
+    row.append(rb);
+    if (c.user_id === me.id) {
+      const d = el('button', { className: 'link', type: 'button', textContent: 'Delete' });
+      d.onclick = async () => { await sb.from('comments').delete().eq('id', c.id); openComments(p, box); };
+      row.append(d);
+    } else {
+      const r = el('button', { className: 'link', type: 'button', textContent: 'Report' });
+      r.onclick = () => reportDlg({ comment_id: c.id });
+      row.append(r);
+    }
+    return row;
+  };
+  list.filter((c) => !c.parent_id).forEach((t) => {
+    box.append(rowFor(t, t));
+    list.filter((r) => r.parent_id === t.id).forEach((r) => box.append(rowFor(r, t)));
+  });
+  box.append(hint);
+  const go = el('button', { className: 'btn primary', type: 'button', textContent: 'Send' });
+  go.onclick = async () => {
+    const body = input.value.trim();
+    if (!body) return;
+    go.disabled = true;
+    const row = { post_id: p.id, body };
+    if (replyTo) { row.parent_id = replyTo.top; row.reply_to = replyTo.user; }
+    const { error: e } = await sb.from('comments').insert(row);
+    go.disabled = false;
+    if (e) return alert('Could not comment: ' + e.message);
+    openComments(p, box);
+  };
+  box.append(el('div', { className: 'cform' }, [input, go]));
+}
+
+async function showBlocked() {
+  const { data } = await sb.from('blocks').select('blocked_id');
+  const nodes = [el('h2', { textContent: 'Blocked users', style: 'margin-top:0' })];
+  if (!data || !data.length) nodes.push(el('p', { className: 'count', textContent: 'You have not blocked anyone.' }));
+  (data || []).forEach((r) => {
+    const b = el('button', { className: 'btn', type: 'button', textContent: 'Unblock' });
+    b.onclick = async () => {
+      await sb.from('blocks').delete().eq('blocked_id', r.blocked_id).eq('blocker_id', me.id);
+      $('dlg').close(); loadFeed();
+    };
+    nodes.push(el('div', { className: 'row' }, [el('span', { textContent: 'Blocked user ' + r.blocked_id.slice(0, 4) }), b]));
+  });
+  openDlg(nodes);
+}
+
+function showTerms() {
+  openDlg([
+    el('h2', { textContent: 'Terms and guidelines', style: 'margin-top:0' }),
+    el('p', { textContent: 'Klapbac is for students to talk about campus life: the fun, the funny and the frustrating.' }),
+    el('p', { textContent: 'Do not post threats, harassment, hate, other people\'s private details, or things you know are false. Posts and accounts that break these rules can be removed.' }),
+    el('p', { textContent: 'Use Report on anything that worries you, and Block to stop seeing someone. We never show your email to other users.' }),
+    el('p', { className: 'count', textContent: 'Draft guidelines. Full terms and privacy policy coming soon.' })
+  ]);
+}
+$('dlgClose').onclick = () => $('dlg').close();
+$('termsBtn').onclick = showTerms;
+$('blockedBtn').onclick = showBlocked;
+$('aliasBtn').onclick = aliasDlg;
+$('profileBtn').onclick = () => { if (myProf) editProfileDlg(); };
+$('bellBtn').onclick = showNotifs;
+$('dmBtn').onclick = () => openDlg([el('h2', { textContent: 'Messages', style: 'margin-top:0' }), el('p', { className: 'count', textContent: 'Direct messages are coming in a later update.' })]);
+document.querySelectorAll('#nav button[data-tab]').forEach((b) => { b.onclick = () => navTo(b.dataset.tab); });
+$('searchBox').addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => runSearch($('searchBox').value), 300); });
+$('pollToggle').onclick = () => { const hide = !$('pollBox').hidden; $('pollBox').hidden = hide; $('pollToggle').textContent = hide ? '+ Add poll' : '- Remove poll'; };
+$('backBtn').onclick = () => { profileOf = null; showView(curTab); loadFeed(); window.scrollTo(0, 0); };
+
+
+function loadImg(u) { return new Promise((res, rej) => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = rej; i.src = u; }); }
+function wrapText(ctx, text, maxW) {
+  const words = text.split(/\s+/); const lines = []; let line = '';
+  for (const w of words) { const t = line ? line + ' ' + w : w; if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t; }
+  if (line) lines.push(line);
+  return lines;
+}
+function drawSeal(x, cx, cy, r) {
+  const rr = (rot) => { x.save(); x.translate(cx, cy); x.rotate(rot); const h = r * 0.85, rad = r * 0.5; x.beginPath(); x.moveTo(-h + rad, -h); x.arcTo(h, -h, h, h, rad); x.arcTo(h, h, -h, h, rad); x.arcTo(-h, h, -h, -h, rad); x.arcTo(-h, -h, h, -h, rad); x.closePath(); x.fill(); x.restore(); };
+  const g = x.createLinearGradient(cx - r, cy - r, cx + r, cy + r); g.addColorStop(0, '#FF3D6E'); g.addColorStop(1, '#FF8A3D');
+  x.fillStyle = g; rr(0); rr(Math.PI / 4);
+  x.strokeStyle = '#0A0A0A'; x.lineWidth = r * 0.28; x.lineCap = 'round'; x.lineJoin = 'round';
+  x.beginPath(); x.moveTo(cx - r * 0.5, cy + r * 0.05); x.lineTo(cx - r * 0.12, cy + r * 0.42); x.lineTo(cx + r * 0.55, cy - r * 0.38); x.stroke();
+}
+async function makeCard(p, name, school, al, avatarUrl, handle, verified) {
+  try { await document.fonts.load('700 40px "Space Grotesk"'); } catch (e) {}
+  const W = 1080, H = 1350, F = '"Space Grotesk", system-ui, sans-serif';
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  x.fillStyle = '#0A0A0A'; x.fillRect(0, 0, W, H);
+  x.fillStyle = '#FF3D6E'; x.fillRect(0, 0, W, 16);
+  const ax = 176, ay = 150, ar = 56;
+  x.save(); x.beginPath(); x.arc(ax, ay, ar, 0, Math.PI * 2); x.clip();
+  let drew = false;
+  if (avatarUrl) { try { const img = await loadImg(avatarUrl); x.drawImage(img, ax - ar, ay - ar, ar * 2, ar * 2); drew = true; } catch (e) {} }
+  if (!drew) { x.fillStyle = al ? 'hsl(' + al.hue + ' 70% 75%)' : '#FF3D6E'; x.fillRect(ax - ar, ay - ar, ar * 2, ar * 2); }
+  x.restore();
+  if (!drew) {
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    if (al) { x.font = '60px ' + F; x.fillStyle = '#000'; x.fillText(al.emoji, ax, ay + 4); }
+    else { x.font = '700 56px ' + F; x.fillStyle = '#0A0A0A'; x.fillText(name[0].toUpperCase(), ax, ay + 4); }
+  }
+  x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+  x.fillStyle = '#F5F5F5'; x.font = '700 46px ' + F; x.fillText(name, 256, handle ? 126 : 142);
+  if (verified) drawSeal(x, 256 + x.measureText(name).width + 34, (handle ? 126 : 142) - 16, 22);
+  if (handle) { x.fillStyle = '#A3A3A3'; x.font = '400 30px ' + F; x.fillText(handle, 256, 168); }
+  x.fillStyle = '#FF3D6E'; x.font = '400 30px ' + F; x.fillText(school.slice(0, 46), 256, handle ? 210 : 190);
+  const len = p.body.length; const fs = len <= 120 ? 68 : len <= 280 ? 54 : 42; const lh = fs * 1.35;
+  x.fillStyle = '#F5F5F5'; x.font = '400 ' + fs + 'px ' + F;
+  const lines = wrapText(x, p.body, W - 240); const maxLines = Math.floor(790 / lh);
+  lines.slice(0, maxLines).forEach((ln, i) => {
+    const t = (i === maxLines - 1 && lines.length > maxLines) ? ln.slice(0, -1) + '…' : ln;
+    x.fillText(t, 120, 300 + lh * (i + 1));
+  });
+  x.fillStyle = '#262626'; x.fillRect(120, 1130, W - 240, 2);
+  const lx = 190, ly = 1235, u = 1.5;
+  x.lineCap = 'round'; x.lineWidth = 14 * u; x.strokeStyle = '#FF3D6E';
+  x.beginPath(); x.arc(lx, ly, 32 * u, Math.PI / 4, Math.PI * 7 / 4, false); x.stroke();
+  x.fillStyle = '#F5F5F5'; x.beginPath(); x.arc(lx, ly, 8 * u, 0, Math.PI * 2); x.fill();
+  return c;
+}
+function saveBlob(blob) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'klapbac-post.png';
+  document.body.append(a); a.click(); a.remove();
+}
+async function shareDlg(p, prof, al) {
+  const anon = !!p.anonymous;
+  const name = anon ? al.name : (prof.display_name || prof.username || 'student');
+  const canvas = await makeCard(p, name, prof.school || '', anon ? al : null, anon ? null : prof.avatar_url, (!anon && prof.display_name) ? '@' + prof.username : '', !anon && !!prof.verified);
+  canvas.style.cssText = 'width:100%;border-radius:12px;display:block;margin:12px 0';
+  const blob = await new Promise((r) => canvas.toBlob(r, 'image/png'));
+  const file = new File([blob], 'klapbac-post.png', { type: 'image/png' });
+  const shareB = el('button', { className: 'btn primary', type: 'button', textContent: 'Share image' });
+  shareB.onclick = async () => {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Klapbac' }); } catch (e) {} }
+    else saveBlob(blob);
+  };
+  const saveB = el('button', { className: 'btn', type: 'button', textContent: 'Save image' });
+  saveB.onclick = () => saveBlob(blob);
+  openDlg([el('h2', { textContent: 'Share this klap', style: 'margin-top:0' }), canvas, el('div', { className: 'row' }, [saveB, shareB])]);
+}
+function resizeImage(file, size) {
+  return new Promise((res, rej) => {
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const m = Math.min(img.width, img.height); const c = document.createElement('canvas'); c.width = c.height = size;
+      c.getContext('2d').drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, size, size);
+      URL.revokeObjectURL(url);
+      c.toBlob((b) => (b ? res(b) : rej(new Error('Could not read that image'))), 'image/jpeg', 0.85);
+    };
+    img.onerror = () => rej(new Error('Could not read that image'));
+    img.src = url;
+  });
+}
+
+function applyFilter(d, f) {
+  for (let i = 0; i < d.length; i += 4) {
+    let r = d[i], g = d[i + 1], b = d[i + 2];
+    const l = 0.299 * r + 0.587 * g + 0.114 * b;
+    if (f === 'bw') { r = g = b = l; }
+    else if (f === 'warm') { r = r * 1.1 + 8; g = g * 1.03; b = b * 0.9; }
+    else if (f === 'cool') { r = r * 0.92; b = b * 1.12 + 6; }
+    else if (f === 'vivid') { r = l + (r - l) * 1.5; g = l + (g - l) * 1.5; b = l + (b - l) * 1.5; r = (r - 128) * 1.1 + 128; g = (g - 128) * 1.1 + 128; b = (b - 128) * 1.1 + 128; }
+    else if (f === 'fade') { r = r * 0.85 + 38; g = g * 0.85 + 38; b = b * 0.85 + 42; }
+    d[i] = r; d[i + 1] = g; d[i + 2] = b;
+  }
+}
+function photoEditor(file) {
+  return new Promise((resolve) => {
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onerror = () => { URL.revokeObjectURL(url); alert('Could not read that image'); resolve(null); };
+    img.onload = () => {
+      const V = 300; let zoom = 1, rot = 0, dx = 0, dy = 0, filt = 'none';
+      const cv = el('canvas', { width: V, height: V, style: 'width:100%;max-width:320px;border-radius:50%;touch-action:none;display:block;margin:12px auto;background:#000' });
+      const dims = () => { const sw = rot % 2 ? img.height : img.width, sh = rot % 2 ? img.width : img.height; const base = Math.max(V / sw, V / sh) * zoom; return { sw, sh, base }; };
+      const clamp = () => { const t = dims(); const lx = Math.max(0, (t.sw * t.base - V) / 2), ly = Math.max(0, (t.sh * t.base - V) / 2); dx = Math.min(lx, Math.max(-lx, dx)); dy = Math.min(ly, Math.max(-ly, dy)); };
+      const draw = (c, N) => {
+        const x = c.getContext('2d'); x.fillStyle = '#000'; x.fillRect(0, 0, N, N);
+        const k = N / V; const t = dims();
+        x.save(); x.translate(N / 2 + dx * k, N / 2 + dy * k); x.rotate(rot * Math.PI / 2); x.scale(t.base * k, t.base * k);
+        x.drawImage(img, -img.width / 2, -img.height / 2); x.restore();
+        if (filt !== 'none') { const d = x.getImageData(0, 0, N, N); applyFilter(d.data, filt); x.putImageData(d, 0, 0); }
+      };
+      const redraw = () => { clamp(); draw(cv, V); };
+      let lx = 0, ly = 0, down = false;
+      cv.onpointerdown = (e) => { down = true; lx = e.clientX; ly = e.clientY; cv.setPointerCapture(e.pointerId); };
+      cv.onpointermove = (e) => { if (!down) return; const r = V / cv.clientWidth; dx += (e.clientX - lx) * r; dy += (e.clientY - ly) * r; lx = e.clientX; ly = e.clientY; redraw(); };
+      cv.onpointerup = () => { down = false; };
+      const zoomIn = el('input', { type: 'range', min: 1, max: 3, step: 0.01, value: 1, ariaLabel: 'Zoom', style: 'width:100%;min-height:32px' });
+      zoomIn.oninput = () => { zoom = parseFloat(zoomIn.value); redraw(); };
+      const rotB = el('button', { className: 'btn', type: 'button', textContent: 'Rotate' });
+      rotB.onclick = () => { rot = (rot + 1) % 4; dx = dy = 0; redraw(); };
+      const chips = el('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;margin:12px 0' });
+      [['none', 'Original'], ['bw', 'B&W'], ['warm', 'Warm'], ['cool', 'Cool'], ['vivid', 'Vivid'], ['fade', 'Fade']].forEach(([k, label]) => {
+        const b = el('button', { className: 'btn', type: 'button', textContent: label, style: 'min-height:40px;padding:0 14px' });
+        b.setAttribute('aria-selected', k === 'none');
+        b.onclick = () => { filt = k; chips.querySelectorAll('button').forEach((x) => x.setAttribute('aria-selected', x === b)); redraw(); };
+        chips.append(b);
+      });
+      chips.classList.add('tabs');
+      const dlg = document.createElement('dialog');
+      const close = (v) => { URL.revokeObjectURL(url); dlg.close(); dlg.remove(); resolve(v); };
+      const cancel = el('button', { className: 'btn', type: 'button', textContent: 'Cancel' });
+      cancel.onclick = () => close(null);
+      const use = el('button', { className: 'btn primary', type: 'button', textContent: 'Use photo' });
+      use.onclick = () => { const out = el('canvas', { width: 256, height: 256 }); draw(out, 256); out.toBlob((b) => close(b), 'image/jpeg', 0.85); };
+      dlg.oncancel = () => close(null);
+      dlg.append(el('h2', { textContent: 'Adjust photo', style: 'margin:0;text-align:center' }), el('p', { className: 'count', textContent: 'Drag to move. Use the slider to zoom.', style: 'text-align:center;margin:4px 0' }), cv, zoomIn, el('div', { style: 'margin-top:8px' }, [rotB]), chips, el('div', { className: 'row' }, [cancel, use]));
+      document.body.append(dlg); dlg.showModal(); redraw();
+    };
+    img.src = url;
+  });
+}
+function editClapDlg(p) {
+  const ta = el('textarea', { maxLength: 500, value: p.body });
+  const msg = el('div', { className: 'msg', hidden: true });
+  const save = el('button', { className: 'btn primary', type: 'button', textContent: 'Save' });
+  save.onclick = async () => {
+    const body = ta.value.trim();
+    if (!body) return show(msg, 'A klap cannot be empty.');
+    save.disabled = true;
+    const { error } = await sb.from('posts').update({ body }).eq('id', p.id);
+    save.disabled = false;
+    if (error) return show(msg, 'Could not save: ' + error.message);
+    $('dlg').close(); loadFeed();
+  };
+  openDlg([el('h2', { textContent: 'Edit klap', style: 'margin-top:0' }), ta, msg, el('p', {}, [save])]);
+}
+const NOTIF_TEXT = { repost: 'reposted your klap', like: 'liked your klap', comment: 'commented on your klap', reply: 'replied to you', follow: 'started following you' };
+async function loadNotifCount() {
+  if (!me) return;
+  const { count } = await sb.from('notifications').select('id', { count: 'exact', head: true }).eq('read', false);
+  const n = count || 0; $('bellBadge').hidden = !n; $('bellBadge').textContent = n > 9 ? '9+' : n; $('bellBtn').classList.toggle('on', n > 0);
+}
+async function openNotif(n) {
+  if (n.type === 'follow') { $('dlg').close(); goProfile(n.actor_id); return; }
+  const { data } = await sb.from('posts').select(POST_SEL).eq('id', n.post_id).maybeSingle();
+  if (!data) return alert('That klap is no longer available.');
+  await withOrig([data]);
+  openDlg([renderPost(data, true)]);
+}
+async function showNotifs() {
+  const { data, error } = await sb.from('notifications')
+    .select('id, type, post_id, actor_id, read, created_at, actor:profiles!notifications_actor_id_fkey(username, display_name)')
+    .order('created_at', { ascending: false }).limit(30);
+  const nodes = [el('h2', { textContent: 'Notifications', style: 'margin-top:0' })];
+  if (error) nodes.push(el('p', { className: 'count', textContent: 'Could not load: ' + error.message }));
+  else if (!data.length) nodes.push(el('p', { className: 'count', textContent: 'Nothing yet. When someone klaps back, it shows here.' }));
+  (data || []).forEach((n) => {
+    const who = n.actor ? (n.actor.display_name || n.actor.username) : 'Someone';
+    const b = el('button', { className: 'btn', type: 'button', textContent: who + ' ' + (NOTIF_TEXT[n.type] || 'did something') + ' · ' + ago(n.created_at), style: 'width:100%;text-align:left;height:auto;padding:10px 14px;margin-bottom:8px;' + (n.read ? '' : 'border-color:var(--pink)') });
+    b.onclick = () => openNotif(n);
+    nodes.push(b);
+  });
+  openDlg(nodes);
+  await sb.from('notifications').update({ read: true }).eq('read', false);
+  loadNotifCount();
+}
+
+function picEl(url, letter, size, font) {
+  const st = 'width:' + size + 'px;height:' + size + 'px;font-size:' + font + 'px';
+  return url ? el('img', { className: 'avatar', src: url, alt: '', style: st }) : el('span', { className: 'avatar', textContent: letter, style: st });
+}
+function goProfile(id) { openProfile(id); window.scrollTo(0, 0); }
+async function openProfile(id) {
+  profileOf = id;
+  showView('profile');
+  const own = id === me.id;
+  const { data: pr, error } = await sb.from('profiles').select('username, display_name, school, bio, avatar_url, verified, pinned_post_id').eq('id', id).single();
+  if (error || !pr) { $('pName').textContent = 'Profile not found'; return; }
+  $('pName').textContent = pr.display_name || pr.username;
+  if (pr.verified) $('pName').append(tickEl());
+  $('pUser').textContent = '@' + pr.username;
+  $('pFollowers').parentElement.onclick = () => peopleDlg(id, 'followers');
+  $('pFollowing').parentElement.onclick = () => peopleDlg(id, 'following');
+  $('pSchool').textContent = pr.school || '';
+  $('pBio').textContent = pr.bio || (own ? 'Add a bio so people know who you are.' : '');
+  $('pAvatar').replaceChildren(picEl(pr.avatar_url, (pr.username || 'S')[0].toUpperCase(), 96, 40));
+  const eb = el('button', { className: 'btn', type: 'button', textContent: 'Edit profile', style: 'width:100%' });
+  eb.onclick = editProfileDlg;
+  let actBtn = eb;
+  if (!own) {
+    const { data: f } = await sb.from('follows').select('followed_id').eq('followed_id', id).eq('follower_id', me.id).maybeSingle();
+    const following = !!f;
+    actBtn = el('button', { className: following ? 'btn' : 'btn primary', type: 'button', textContent: following ? 'Following' : 'Follow', style: 'width:100%' });
+    actBtn.onclick = async () => {
+      actBtn.disabled = true;
+      if (following) await sb.from('follows').delete().eq('followed_id', id).eq('follower_id', me.id);
+      else await sb.from('follows').insert({ followed_id: id });
+      openProfile(id);
+    };
+  }
+  $('pActions').replaceChildren(actBtn);
+  const { data, count } = await sb.from('posts')
+    .select(POST_SEL, { count: 'exact' })
+    .eq('user_id', id).eq('anonymous', false).order('created_at', { ascending: false }).limit(30);
+  await withOrig(data);
+  $('pPosts').textContent = count || 0;
+  const c1 = await sb.from('follows').select('follower_id', { count: 'exact', head: true }).eq('followed_id', id);
+  const c2 = await sb.from('follows').select('followed_id', { count: 'exact', head: true }).eq('follower_id', id);
+  $('pFollowers').textContent = c1.count || 0; $('pFollowing').textContent = c2.count || 0;
+  const feed = $('pFeed'); feed.replaceChildren();
+  if (pr.pinned_post_id) {
+    const { data: pin } = await sb.from('posts').select(POST_SEL).eq('id', pr.pinned_post_id).eq('anonymous', false).maybeSingle();
+    if (pin) await withOrig([pin]);
+    if (pin) feed.append(el('p', { className: 'count', textContent: '📌 Pinned', style: 'margin:0 0 6px' }), renderPost(pin));
+  }
+  const rest = (data || []).filter((p) => p.id !== pr.pinned_post_id);
+  if (!rest.length && !feed.children.length) return feed.append(el('p', { className: 'empty', textContent: 'No klaps yet.' }));
+  rest.forEach((p) => feed.append(renderPost(p)));
+}
+function editProfileDlg() {
+  let editedBlob = null;
+  const wrap = el('div', { style: 'text-align:center;margin-bottom:8px' });
+  const setPic = (url) => wrap.replaceChildren(picEl(url, (myProf.username || 'S')[0].toUpperCase(), 96, 40));
+  setPic(myProf.avatar_url);
+  const file = el('input', { type: 'file', accept: 'image/*', hidden: true });
+  file.onchange = async () => { const f = file.files[0]; if (!f) return; const blob = await photoEditor(f); file.value = ''; if (blob) { editedBlob = blob; setPic(URL.createObjectURL(blob)); } };
+  const change = el('button', { className: 'link', type: 'button', textContent: 'Change profile photo' });
+  change.onclick = () => file.click();
+  const dName = el('input', { value: myProf.display_name || '', maxLength: 40, placeholder: 'Your name (spaces are fine)' });
+  const user = el('input', { value: myProf.username || '', maxLength: 20 });
+  user.addEventListener('input', () => { user.value = user.value.replace(/\s+/g, '_').replace(/[^A-Za-z0-9_]/g, ''); });
+  const bio = el('textarea', { maxLength: 160, value: myProf.bio || '', placeholder: 'Tell people about yourself', style: 'min-height:90px' });
+  const counter = el('span', { className: 'count', textContent: bio.value.length + ' / 160' });
+  bio.addEventListener('input', () => { counter.textContent = bio.value.length + ' / 160'; });
+  const msg = el('div', { className: 'msg', hidden: true });
+  const save = el('button', { className: 'btn primary', type: 'button', textContent: 'Done', style: 'width:100%' });
+  save.onclick = async () => {
+    show(msg, '');
+    if (!/^[A-Za-z0-9_]{3,20}$/.test(user.value)) return show(msg, 'Username: 3 to 20 letters, numbers or underscores, no spaces.');
+    save.disabled = true;
+    try {
+      const upd = { username: user.value, display_name: dName.value.trim() || null, bio: bio.value.trim() };
+      if (editedBlob) {
+        const blob = editedBlob;
+        const path = me.id + '/avatar.jpg';
+        const up = await sb.storage.from('avatars').upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
+        if (up.error) throw up.error;
+        upd.avatar_url = sb.storage.from('avatars').getPublicUrl(path).data.publicUrl + '?v=' + Date.now();
+      }
+      const { error } = await sb.from('profiles').update(upd).eq('id', me.id);
+      if (error) throw error;
+      await loadMe(); $('dlg').close(); loadFeed();
+    } catch (e) {
+      show(msg, e.code === '23505' ? 'That username is taken.' : 'Could not save: ' + e.message);
+    } finally { save.disabled = false; }
+  };
+  const delLink = el('p', { className: 'hint' }, [el('a', { href: 'mailto:klapbac@proton.me?subject=' + encodeURIComponent('Delete my Klapbac account') + '&body=' + encodeURIComponent('Please delete my account. My username is ' + (myProf.username || '') + '.'), textContent: 'Request account deletion', style: 'color:var(--pink)' })]);
+  openDlg([el('h2', { textContent: 'Edit profile', style: 'margin-top:0;text-align:center' }), wrap, el('div', { style: 'text-align:center' }, [change, file]),
+    el('label', { textContent: 'Name' }), dName, el('label', { textContent: 'Username' }), user, el('p', { className: 'hint', textContent: 'No spaces. Others see this as @username.' }),
+    el('label', { textContent: 'Bio' }), bio, counter, msg, el('p', {}, [save]), delLink]);
+}
+const T = {
+  en: { home: 'Home', search: 'Search', campus: 'Campus', me: 'Me', all: 'All students', school: 'My school', following: 'Following', composeLabel: "What's happening on campus?", composePh: "Tell us what's on your mind...", klapBtn: 'Klap', klapping: 'Klapping...', klapped: 'Klapped!', loadMore: 'Load more', noKlaps: 'No klaps yet. Be the first to klap.', searchPh: 'Search people, klaps, #tags', trending: 'Trending now', myProfile: 'My profile', editProfile: 'Edit profile', saved: 'Saved klaps', muted: 'Muted words', language: 'Language', invite: 'Share my profile link', alias: 'My alias', blocked: 'Blocked users', admin: 'Admin page', logout: 'Log out' },
+  pcm: { home: 'Home', search: 'Find am', campus: 'Campus', me: 'Me', all: 'Everybody', school: 'My school', following: 'Wey I dey follow', composeLabel: 'Wetin dey happen for campus?', composePh: 'Talk your own...', klapBtn: 'Klap am', klapping: 'E dey go...', klapped: 'E don enter!', loadMore: 'Show more', noKlaps: 'Nobody don klap yet. Be the first!', searchPh: 'Find person, klap or #tag', trending: 'Wetin dey trend', myProfile: 'My profile', editProfile: 'Change profile', saved: 'Wetin I save', muted: 'Words wey I no wan see', language: 'Language', invite: 'Share my profile link', alias: 'My alias', blocked: 'People wey I block', admin: 'Admin page', logout: 'Log out' }
+};
+let LANG = 'en';
+try { LANG = localStorage.getItem('lang') || 'en'; } catch (e) {}
+function t(k) { return (T[LANG] && T[LANG][k]) || T.en[k] || k; }
+function applyLang() {
+  document.querySelectorAll('[data-i]').forEach((n) => { n.textContent = t(n.dataset.i); });
+  const m = { tabAll: 'all', tabSchool: 'school', tabFollowing: 'following' };
+  Object.keys(m).forEach((id) => { $(id).textContent = t(m[id]); });
+  document.querySelector('label[for=body]').textContent = t('composeLabel');
+  $('body').placeholder = t('composePh');
+  $('searchBox').placeholder = t('searchPh');
+  if (!$('postBtn').disabled) $('postBtn').textContent = t('klapBtn');
+}
+function langDlg() {
+  const mk = (code, label) => { const b = el('button', { className: 'mrow', type: 'button' }, [el('span', { textContent: label }), el('span', { className: 'count', textContent: LANG === code ? '✓' : '' })]); b.onclick = () => { LANG = code; try { localStorage.setItem('lang', code); } catch (e) {} applyLang(); renderMe(); $('dlg').close(); loadFeed(); }; return b; };
+  openDlg([el('h2', { textContent: 'Language', style: 'margin-top:0' }), mk('en', 'English'), mk('pcm', 'Pidgin')]);
+}
+
+const EYE = '<svg viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF = '<svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.7A9.6 9.6 0 0 1 12 5.5c6.4 0 10 6.5 10 6.5a17 17 0 0 1-3.1 3.9M6.6 6.9C3.9 8.6 2 12 2 12s3.6 6.5 10 6.5c1.6 0 3-.4 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+$('eyeBtn').onclick = () => {
+  const p = $('password'); const show = p.type === 'password';
+  p.type = show ? 'text' : 'password';
+  $('eyeBtn').innerHTML = show ? EYE_OFF : EYE;
+  $('eyeBtn').setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+};
+const IC = {
+  heart: '<path d="M12 20.5s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.9c0 5.4-7.5 10-7.5 10z"/>',
+  comment: '<path d="M20.5 12a7.5 7.5 0 0 1-10.9 6.7L4 20l1.4-4.4A7.5 7.5 0 1 1 20.5 12z"/>',
+  repost: '<path d="M17 3l3 3-3 3M4 11V9a3 3 0 0 1 3-3h13M7 21l-3-3 3-3M20 13v2a3 3 0 0 1-3 3H4"/>',
+  bookmark: '<path d="M6.5 3.5h11a1 1 0 0 1 1 1V21L12 16.8 5.5 21V4.5a1 1 0 0 1 1-1z"/>',
+  share: '<path d="M12 15V3m0 0L8 7m4-4l4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>',
+  more: '<circle cx="5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.7" fill="currentColor" stroke="none"/>'
+};
+function abtn(k, label, count, on) {
+  const b = el('button', { className: 'ab', type: 'button', ariaLabel: label, innerHTML: '<svg viewBox="0 0 24 24"' + (on ? ' class="on"' : '') + '>' + IC[k] + '</svg>' });
+  if (count !== undefined) b.append(el('span', { textContent: count ? String(count) : '' }));
+  b.setAttribute('aria-pressed', !!on);
+  return b;
+}
+function tickEl() { return el('span', { className: 'tick', title: 'Verified', innerHTML: '<svg viewBox="0 0 24 24" aria-label="Verified"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="url(#kg)"/><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="url(#kg)" transform="rotate(45 12 12)"/><path d="M8.1 12.4l2.7 2.7 5.2-5.6" fill="none" stroke="#0A0A0A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' }); }
+function nameB(nm, v) { const b = el('b', { textContent: nm }); if (v) b.append(tickEl()); return b; }
+async function openByUsername(u) {
+  const { data } = await sb.from('profiles').select('id').eq('username', u).maybeSingle();
+  if (data) { if ($('dlg').open) $('dlg').close(); goProfile(data.id); } else alert('No such user.');
+}
+function bodyEl(text) {
+  const p = el('p');
+  text.split(/(#[A-Za-z0-9_]{2,30}|@[A-Za-z0-9_]{3,20})/g).forEach((part) => {
+    if (/^#[A-Za-z0-9_]{2,30}$/.test(part)) {
+      const a = el('a', { textContent: part, href: '#', style: 'color:var(--pink)' });
+      a.onclick = (e) => { e.preventDefault(); if ($('dlg').open) $('dlg').close(); openSearch(part); };
+      p.append(a);
+    } else if (/^@[A-Za-z0-9_]{3,20}$/.test(part)) {
+      const a = el('a', { textContent: part, href: '#', style: 'color:var(--pink)' });
+      a.onclick = (e) => { e.preventDefault(); openByUsername(part.slice(1)); };
+      p.append(a);
+    } else p.append(document.createTextNode(part));
+  });
+  return p;
+}
+function origBox(p) {
+  const o = p.orig;
+  const box = el('div', { style: 'border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 12px' });
+  if (!o) { box.append(el('p', { className: 'count', textContent: 'The original klap was removed.', style: 'margin:0' })); return box; }
+  const op = o.profiles || {}; const oa = aliasFor(o.user_id, op.alias_seed);
+  box.append(o.anonymous ? el('b', { textContent: oa.emoji + ' ' + oa.name }) : nameB(op.display_name || op.username || 'student', op.verified), bodyEl(o.body));
+  return box;
+}
+async function loadPoll(p, box) {
+  box.replaceChildren(el('p', { className: 'count', textContent: 'Loading poll...', style: 'margin:0' }));
+  const mine = await sb.from('poll_votes').select('option_index').eq('post_id', p.id).eq('user_id', me.id).maybeSingle();
+  const res = await sb.rpc('poll_results', { pid: p.id });
+  const counts = {}; (res.data || []).forEach((r) => { counts[r.option_index] = Number(r.votes); });
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  const voted = mine.data ? mine.data.option_index : null;
+  box.replaceChildren();
+  p.poll_options.forEach((opt, i) => {
+    if (voted === null) {
+      const b = el('button', { className: 'btn', type: 'button', textContent: opt, style: 'width:100%;margin-bottom:8px;text-align:left' });
+      b.onclick = async () => { const { error } = await sb.from('poll_votes').insert({ post_id: p.id, option_index: i }); if (error) alert(error.message); loadPoll(p, box); };
+      box.append(b);
+    } else {
+      const pct = total ? Math.round(100 * (counts[i] || 0) / total) : 0;
+      box.append(el('div', { style: 'position:relative;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;overflow:hidden;min-height:44px;display:flex;align-items:center;padding:0 14px' }, [
+        el('div', { style: 'position:absolute;inset:0 auto 0 0;width:' + pct + '%;background:' + (i === voted ? 'rgba(255,61,110,.35)' : 'rgba(255,255,255,.08)') }),
+        el('span', { style: 'position:relative;flex:1', textContent: opt }), el('b', { style: 'position:relative', textContent: pct + '%' })]));
+    }
+  });
+  box.append(el('p', { className: 'count', textContent: total + ' vote' + (total === 1 ? '' : 's'), style: 'margin:0 0 8px' }));
+}
+function repostDlg(p) {
+  const ta = el('textarea', { maxLength: 500, placeholder: 'Add your own words (optional)', style: 'min-height:70px' });
+  const msg = el('div', { className: 'msg', hidden: true });
+  const go = el('button', { className: 'btn primary', type: 'button', textContent: 'Repost' });
+  go.onclick = async () => {
+    go.disabled = true;
+    const target = (p.repost_of && !p.body) ? p.repost_of : p.id;
+    const { error } = await sb.from('posts').insert({ body: ta.value.trim(), repost_of: target });
+    go.disabled = false;
+    if (error) return show(msg, 'Could not repost: ' + error.message);
+    $('dlg').close(); loadFeed();
+  };
+  openDlg([el('h2', { textContent: 'Repost', style: 'margin-top:0' }), ta, msg, el('p', {}, [go])]);
+}
+function moreDlg(p, prof) {
+  const rows = [];
+  const row = (label, fn) => { const b = el('button', { className: 'mrow', type: 'button' }, [el('span', { textContent: label })]); b.onclick = async () => { $('dlg').close(); await fn(); }; rows.push(b); };
+  if (isMine(p.user_id)) {
+    row('Edit klap', async () => editClapDlg(p));
+    if (!p.anonymous) row('Pin to my profile', async () => { await sb.from('profiles').update({ pinned_post_id: p.id }).eq('id', me.id); alert('Pinned to your profile.'); });
+    row('Delete klap', async () => { if (!confirm('Delete this klap?')) return; await sb.from('posts').delete().eq('id', p.id); loadFeed(); });
+  } else {
+    row('Not interested', async () => { await sb.from('not_interested').insert({ post_id: p.id }); loadFeed(); });
+    row('Report', async () => reportDlg({ post_id: p.id }));
+    row('Block ' + (p.anonymous ? 'this user' : '@' + (prof.username || 'user')), async () => { if (!confirm('Block? You will no longer see their klaps.')) return; await sb.from('blocks').insert({ blocked_id: p.user_id }); loadFeed(); });
+  }
+  openDlg([el('h2', { textContent: 'Options', style: 'margin-top:0' }), ...rows]);
+}
+async function savedDlg() {
+  const { data: bm } = await sb.from('bookmarks').select('post_id').order('created_at', { ascending: false }).limit(30);
+  const ids = (bm || []).map((r) => r.post_id);
+  const nodes = [el('h2', { textContent: 'Saved klaps', style: 'margin-top:0' })];
+  if (!ids.length) nodes.push(el('p', { className: 'count', textContent: 'Tap the star on a klap to save it here.' }));
+  else { const { data } = await sb.from('posts').select(POST_SEL).in('id', ids); await withOrig(data); (data || []).forEach((p) => nodes.push(renderPost(p))); }
+  openDlg(nodes);
+}
+async function mutedDlg() {
+  await loadBlocks();
+  const nodes = [el('h2', { textContent: 'Muted words', style: 'margin-top:0' }), el('p', { className: 'count', textContent: 'Klaps that contain these words are hidden from your feed.' })];
+  const input = el('input', { maxLength: 40, placeholder: 'Add a word' });
+  const add = el('button', { className: 'btn primary', type: 'button', textContent: 'Add' });
+  add.onclick = async () => { const w = input.value.trim().toLowerCase(); if (w.length < 2) return; const { error } = await sb.from('muted_words').insert({ word: w }); if (error && error.code !== '23505') return alert(error.message); mutedDlg(); loadFeed(); };
+  nodes.push(el('div', { className: 'cform' }, [input, add]));
+  myMuted.forEach((w) => {
+    const rm = el('button', { className: 'link', type: 'button', textContent: 'Remove' });
+    rm.onclick = async () => { await sb.from('muted_words').delete().eq('word', w).eq('user_id', me.id); mutedDlg(); loadFeed(); };
+    nodes.push(el('div', { className: 'row' }, [el('span', { textContent: w }), rm]));
+  });
+  openDlg(nodes);
+}
+function personRow(u, following) {
+  let f = following;
+  const who = el('div', { style: 'display:flex;align-items:center;gap:10px;cursor:pointer;min-width:0' }, [picEl(u.avatar_url, (u.username || 'S')[0].toUpperCase(), 40, 18), el('div', {}, [nameB(u.display_name || u.username, u.verified), el('div', { className: 'count', textContent: '@' + u.username })])]);
+  who.onclick = () => { $('dlg').close(); goProfile(u.id); };
+  const row = el('div', { className: 'row', style: 'margin-bottom:10px' }, [who]);
+  if (u.id !== me.id) {
+    const b = el('button', { className: f ? 'btn' : 'btn primary', type: 'button', textContent: f ? 'Following' : 'Follow', style: 'min-height:40px' });
+    b.onclick = async () => {
+      b.disabled = true;
+      if (f) await sb.from('follows').delete().eq('followed_id', u.id).eq('follower_id', me.id); else await sb.from('follows').insert({ followed_id: u.id });
+      f = !f; b.disabled = false; b.textContent = f ? 'Following' : 'Follow'; b.className = f ? 'btn' : 'btn primary';
+    };
+    row.append(b);
+  }
+  return row;
+}
+async function peopleDlg(id, kind) {
+  const col = kind === 'followers' ? 'followed_id' : 'follower_id';
+  const emb = kind === 'followers' ? 'u:profiles!follows_follower_id_fkey(id, username, display_name, avatar_url, verified)' : 'u:profiles!follows_followed_id_fkey(id, username, display_name, avatar_url, verified)';
+  const [res, mine] = await Promise.all([sb.from('follows').select(emb).eq(col, id).limit(100), sb.from('follows').select('followed_id').eq('follower_id', me.id)]);
+  const set = new Set((mine.data || []).map((r) => r.followed_id));
+  const nodes = [el('h2', { textContent: kind === 'followers' ? 'Followers' : 'Following', style: 'margin-top:0' })];
+  if (!res.data || !res.data.length) nodes.push(el('p', { className: 'count', textContent: 'Nobody here yet.' }));
+  (res.data || []).forEach((r) => { if (r.u) nodes.push(personRow(r.u, set.has(r.u.id))); });
+  openDlg(nodes);
+}
+async function onboardDlg() {
+  await sb.from('profiles').update({ onboarded: true }).eq('id', me.id);
+  myProf.onboarded = true;
+  const nodes = [el('h2', { textContent: 'Welcome to Klapbac', style: 'margin-top:0' }), el('p', { className: 'count', textContent: 'Follow a few students from your school so your feed is not empty.' })];
+  if (myProf.school) {
+    const { data } = await sb.from('profiles').select('id, username, display_name, avatar_url, verified').eq('is_alias', false).eq('school', myProf.school).neq('id', me.id).order('created_at', { ascending: false }).limit(8);
+    (data || []).forEach((u) => nodes.push(personRow(u, false)));
+    if (!data || !data.length) nodes.push(el('p', { className: 'count', textContent: 'You are one of the first from your school. Share your profile link from the Me tab to invite friends.' }));
+  }
+  const done = el('button', { className: 'btn primary', type: 'button', textContent: 'Done', style: 'width:100%' });
+  done.onclick = () => { $('dlg').close(); loadFeed(); };
+  nodes.push(el('p', {}, [done]));
+  openDlg(nodes);
+}
+let inviteDone = false;
+async function handleInvite() {
+  const u = new URLSearchParams(location.search).get('u');
+  if (!u || inviteDone) return;
+  inviteDone = true;
+  await openByUsername(u);
+  history.replaceState(null, '', location.pathname);
+}
+function inviteShare() {
+  const url = location.origin + '/?u=' + myProf.username;
+  if (navigator.share) navigator.share({ title: 'Join me on Klapbac', text: 'Follow me on Klapbac', url }).catch(() => {});
+  else if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => alert('Link copied: ' + url));
+  else alert(url);
+}
+let searchTimer = null;
+async function loadTrending() {
+  const { data } = await sb.rpc('trending_tags');
+  const box = $('trendBox'); box.replaceChildren();
+  if (!data || !data.length) return;
+  box.append(el('h3', { textContent: t('trending'), style: 'margin:8px 0' }));
+  data.forEach((r) => { const c = el('button', { className: 'chip', type: 'button', textContent: '#' + r.tag }); c.onclick = () => openSearch('#' + r.tag); box.append(c); });
+}
+function openSearch(q) { showView('search'); $('searchBox').value = q; runSearch(q); window.scrollTo(0, 0); }
+async function runSearch(raw) {
+  const q = raw.trim().replace(/[^\p{L}\p{N}_# ]/gu, '').slice(0, 40);
+  const out = $('searchOut'); out.replaceChildren();
+  $('trendBox').hidden = !!q;
+  if (!q) return;
+  if (!q.startsWith('#')) {
+    const { data } = await sb.from('profiles').select('id, username, display_name, avatar_url, verified').eq('is_alias', false).or('username.ilike.%' + q + '%,display_name.ilike.%' + q + '%').limit(8);
+    if (data && data.length) {
+      const mine = await sb.from('follows').select('followed_id').eq('follower_id', me.id);
+      const set = new Set((mine.data || []).map((r) => r.followed_id));
+      out.append(el('h3', { textContent: 'People', style: 'margin:8px 0' }));
+      data.forEach((u) => out.append(personRow(u, set.has(u.id))));
+    }
+  }
+  const { data: posts } = await sb.from('posts').select(POST_SEL).ilike('body', '%' + q + '%').order('created_at', { ascending: false }).limit(20);
+  await withOrig(posts);
+  const shown = (posts || []).filter((p) => !blocked.has(p.user_id));
+  out.append(el('h3', { textContent: 'Klaps', style: 'margin:12px 0 8px' }));
+  if (!shown.length) out.append(el('p', { className: 'count', textContent: 'No klaps found.' }));
+  shown.forEach((p) => out.append(renderPost(p)));
+}
+let curTab = 'home';
+function showView(name) {
+  const map = { home: 'appView', campus: 'appView', search: 'searchView', me: 'meView', profile: 'profileView' };
+  ['appView', 'searchView', 'meView', 'profileView'].forEach((id) => { $(id).hidden = true; });
+  $(map[name]).hidden = false;
+  if (name !== 'profile') { curTab = name; profileOf = null; }
+  document.querySelectorAll('#nav button[data-tab]').forEach((b) => b.setAttribute('aria-current', b.dataset.tab === curTab));
+  $('campusNote').hidden = name !== 'campus';
+}
+function navTo(tab) {
+  if (tab === 'plus') { showView('home'); window.scrollTo(0, 0); $('body').focus(); return; }
+  if (tab === 'home') { showView('home'); if (scope !== 'all') setScope('all'); else loadFeed(); }
+  else if (tab === 'campus') { showView('campus'); setScope('school'); }
+  else if (tab === 'search') { showView('search'); loadTrending(); }
+  else if (tab === 'me') { showView('me'); renderMe(); }
+  window.scrollTo(0, 0);
+}
+function renderMe() {
+  const box = $('meList'); box.replaceChildren();
+  const row = (label, fn, sub) => { const b = el('button', { className: 'mrow', type: 'button' }, [el('span', { textContent: label }), el('span', { className: 'count', textContent: sub || '›' })]); b.onclick = fn; box.append(b); };
+  row(t('myProfile'), () => goProfile(me.id));
+  row(t('editProfile'), () => { if (myProf) editProfileDlg(); });
+  row(t('saved'), savedDlg);
+  row(t('muted'), mutedDlg);
+  row(t('language'), langDlg, LANG === 'pcm' ? 'Pidgin' : 'English');
+  row(t('invite'), inviteShare);
+  row(t('alias'), aliasDlg);
+  row(t('blocked'), showBlocked);
+  if (myProf && myProf.is_admin) row(t('admin'), adminDlg);
+  row('Terms', () => { location.href = 'terms.html#terms'; });
+  row('Privacy', () => { location.href = 'terms.html#privacy'; });
+  row(t('logout'), () => sb.auth.signOut());
+}
+async function adminDlg() {
+  const { data, error } = await sb.rpc('admin_reports');
+  const nodes = [el('h2', { textContent: 'Admin page', style: 'margin-top:0' })];
+  const un = el('input', { placeholder: 'Username (no @)', maxLength: 20 });
+  const act = async (fn, v) => {
+    const { data: u } = await sb.from('profiles').select('id').eq('username', un.value.trim()).maybeSingle();
+    if (!u) return alert('No such user.');
+    const { error: e } = await sb.rpc(fn, fn === 'admin_set_verified' ? { uid: u.id, v } : { uid: u.id, s: v });
+    alert(e ? e.message : 'Done.');
+  };
+  const mk = (label, fn, v) => { const b = el('button', { className: 'btn', type: 'button', textContent: label, style: 'min-height:40px;padding:0 12px' }); b.onclick = () => act(fn, v); return b; };
+  nodes.push(un, el('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px' }, [mk('Verify', 'admin_set_verified', true), mk('Unverify', 'admin_set_verified', false), mk('Suspend', 'admin_suspend', true), mk('Unsuspend', 'admin_suspend', false)]));
+  nodes.push(el('h3', { textContent: 'Reports', style: 'margin:0 0 8px' }));
+  if (error) nodes.push(el('p', { className: 'count', textContent: 'Could not load: ' + error.message }));
+  else if (!data.length) nodes.push(el('p', { className: 'count', textContent: 'No reports.' }));
+  (data || []).forEach((r) => {
+    const kind = r.post_id ? 'post' : 'comment'; const item = r.post_id || r.comment_id;
+    const card = el('div', { className: 'card', style: 'margin:0 0 10px' }, [
+      el('p', { className: 'count', textContent: r.reason + ' · ' + r.report_count + ' report(s) · ' + (r.is_hidden ? 'HIDDEN' : 'visible') + ' · by @' + r.author_name, style: 'margin:0 0 6px' }),
+      el('p', { textContent: (r.body || '').slice(0, 200), style: 'margin:0 0 8px' })]);
+    const bar = el('div', { style: 'display:flex;flex-wrap:wrap;gap:8px' });
+    const btn = (label, fn) => { const b = el('button', { className: 'btn', type: 'button', textContent: label, style: 'min-height:40px;padding:0 12px' }); b.onclick = async () => { const { error: e } = await fn(); if (e) alert(e.message); else adminDlg(); }; bar.append(b); };
+    btn(r.is_hidden ? 'Restore' : 'Hide', () => sb.rpc('admin_set_hidden', { kind, item, hide: !r.is_hidden }));
+    btn('Delete', () => (confirm('Delete permanently?') ? sb.rpc('admin_delete', { kind, item }) : Promise.resolve({})));
+    btn('Suspend author', () => sb.rpc('admin_suspend', { uid: r.author_id, s: true }));
+    card.append(bar); nodes.push(card);
+  });
+  openDlg(nodes);
+}
+
+function renderPost(p, openComm) {
+  const likes = p.likes || [];
+  const liked = likes.some((l) => l.user_id === me.id);
+  const prof = p.profiles || {};
+  const al = aliasFor(p.user_id, prof.alias_seed);
+  const avatarEl = (!p.anonymous && prof.avatar_url)
+    ? el('img', { className: 'avatar', src: prof.avatar_url, alt: '', loading: 'lazy' })
+    : el('span', { className: 'avatar', textContent: p.anonymous ? al.emoji : (prof.username || 'S')[0].toUpperCase() });
+  if (p.anonymous) avatarEl.style.background = 'hsl(' + al.hue + ' 70% 75%)';
+  const nameEl = el('span', { className: 'name', textContent: p.anonymous ? al.name : (prof.display_name || prof.username || 'student') });
+  if (!p.anonymous) { nameEl.style.cursor = 'pointer'; nameEl.onclick = () => goProfile(p.user_id); avatarEl.style.cursor = 'pointer'; avatarEl.onclick = () => goProfile(p.user_id); }
+  if (!p.anonymous && prof.verified) nameEl.append(tickEl());
+  const meta = el('div', { className: 'meta' }, [
+    avatarEl,
+    nameEl,
+    el('span', { className: 'school', textContent: prof.school || '' }),
+    el('span', { className: 'time', textContent: ago(p.created_at) })
+  ]);
+  if (!p.anonymous && prof.display_name) meta.insertBefore(el('span', { className: 'time', textContent: '@' + prof.username }), meta.children[2]);
+  const likeBtn = abtn('heart', 'Like', likes.length, liked);
+  likeBtn.onclick = async () => {
+    likeBtn.disabled = true;
+    if (liked) await sb.from('likes').delete().eq('post_id', p.id).eq('user_id', me.id);
+    else await sb.from('likes').insert({ post_id: p.id });
+    loadFeed();
+  };
+  const nC = (p.comments && p.comments[0] && p.comments[0].count) || 0;
+  const cBtn = abtn('comment', 'Comments', nC, false);
+  const shareBtn = abtn('share', 'Share');
+  shareBtn.onclick = () => shareDlg(p, prof, al);
+  const cbox = el('div', { className: 'cbox', hidden: true });
+  cBtn.onclick = () => { cbox.hidden = !cbox.hidden; if (!cbox.hidden) openComments(p, cbox); };
+  const rpBtn = abtn('repost', 'Repost');
+  rpBtn.onclick = () => repostDlg(p);
+  const saved = mySaved.has(p.id);
+  const bmBtn = abtn('bookmark', 'Save', undefined, saved);
+  bmBtn.onclick = async () => {
+    bmBtn.disabled = true;
+    if (saved) await sb.from('bookmarks').delete().eq('post_id', p.id).eq('user_id', me.id);
+    else await sb.from('bookmarks').insert({ post_id: p.id });
+    loadFeed();
+  };
+  const moreBtn = abtn('more', 'More');
+  moreBtn.onclick = () => moreDlg(p, prof);
+  const actions = el('div', { className: 'actions' }, [likeBtn, cBtn, rpBtn, bmBtn, shareBtn, moreBtn]);
+  const note = p.hidden ? el('p', { className: 'msg', textContent: 'Hidden after several reports. It is under review.' }) : document.createTextNode('');
+  if (openComm) { cbox.hidden = false; openComments(p, cbox); }
+  const kids = [meta, note];
+  if (p.repost_of && !p.body) kids.push(el('p', { className: 'count', textContent: '↻ Reposted', style: 'margin:0 0 6px' }));
+  if (p.body) kids.push(bodyEl(p.body));
+  if (p.poll_options) { const pb = el('div', { className: 'poll', style: 'margin-bottom:8px' }); loadPoll(p, pb); kids.push(pb); }
+  if (p.repost_of) kids.push(origBox(p));
+  kids.push(actions, cbox);
+  return el('article', { className: 'card post' }, kids);
+}
+
+async function loadFeed() {
+  if (!me) return;
+  if (!$('profileView').hidden && profileOf) return openProfile(profileOf);
+  await loadBlocks();
+  let q = sb.from('posts')
+    .select(POST_SEL)
+    .order('created_at', { ascending: false }).limit(feedLimit);
+  if (scope === 'school' && myProf && myProf.school) q = q.eq('profiles.school', myProf.school);
+  if (scope === 'following') {
+    const { data: fl } = await sb.from('follows').select('followed_id').eq('follower_id', me.id);
+    const ids = (fl || []).map((r) => r.followed_id);
+    if (!ids.length) { $('feed').replaceChildren(el('p', { className: 'empty', textContent: 'You are not following anyone yet. Tap a name to open a profile, then tap Follow.' })); return; }
+    q = q.in('user_id', ids).eq('anonymous', false);
+  }
+  const { data, error } = await q;
+  if (data) await withOrig(data);
+  const feed = $('feed');
+  feed.replaceChildren();
+  if (error) return feed.append(el('p', { className: 'empty', textContent: 'Could not load posts: ' + error.message }));
+  const shown = data.filter((p) => !blocked.has(p.user_id) && !myHiddenIds.has(p.id) && !isMuted(p));
+  if (!shown.length) return feed.append(el('p', { className: 'empty', textContent: t('noKlaps') }));
+  shown.forEach((p) => feed.append(renderPost(p)));
+  if (data.length >= feedLimit) {
+    const more = el('button', { className: 'btn', type: 'button', textContent: t('loadMore'), style: 'width:100%;margin-top:8px' });
+    more.onclick = () => { feedLimit += 30; loadFeed(); };
+    feed.append(more);
+  }
+}
+
+async function publish() {
+  const body = $('body').value.trim();
+  const msg = $('postMsg');
+  show(msg, '');
+  if (!body) return show(msg, 'Write something first.');
+  $('postBtn').disabled = true;
+  $('postBtn').textContent = t('klapping');
+  const row = { body, anonymous: $('anon').checked };
+  if (!$('pollBox').hidden) {
+    const opts = [...document.querySelectorAll('.pollopt')].map((i) => i.value.trim()).filter(Boolean);
+    if (opts.length < 2) { $('postBtn').disabled = false; $('postBtn').textContent = t('klapBtn'); return show(msg, 'A poll needs at least 2 options.'); }
+    row.poll_options = opts;
+  }
+  if (row.anonymous) {
+    if (!myAliasId) { $('postBtn').disabled = false; $('postBtn').textContent = t('klapBtn'); return show(msg, 'Anonymous mode is not ready yet. Refresh and try again.'); }
+    row.user_id = myAliasId;
+  }
+  const { error } = await sb.from('posts').insert(row);
+  $('postBtn').disabled = false;
+  $('postBtn').textContent = t('klapBtn');
+  if (error) return show(msg, 'Could not post: ' + error.message);
+  $('body').value = '';
+  $('count').textContent = '0 / 500';
+  show(msg, t('klapped'), true);
+  setTimeout(() => show(msg, ''), 2500);
+  $('anon').checked = false;
+  document.querySelectorAll('.pollopt').forEach((i) => { i.value = ''; });
+  $('pollBox').hidden = true; $('pollToggle').textContent = '+ Add poll';
+  await loadFeed();
+  const first = document.querySelector('#feed .post');
+  if (first) first.classList.add('fresh');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function render(session) {
+  me = session ? session.user : null;
+  $('authView').hidden = !!me;
+  const VIEWS = ['appView', 'searchView', 'meView', 'profileView'];
+  if (!me) { VIEWS.forEach((id) => { $(id).hidden = true; }); profileOf = null; }
+  else if (VIEWS.every((id) => $(id).hidden)) showView('home');
+  $('nav').hidden = !me;
+  $('dmBtn').hidden = !me;
+  $('bellBtn').hidden = !me;
+  $('logoutBtn').hidden = !me;
+  $('blockedBtn').hidden = !me;
+  $('aliasBtn').hidden = !me;
+  $('profileBtn').hidden = !me;
+  if (me) setAnonLabel();
+  clearInterval(timer);
+  if (me) {
+    loadMe().then(() => { loadFeed(); loadNotifCount(); if (myProf && myProf.onboarded === false) onboardDlg(); handleInvite(); });
+    timer = setInterval(() => { if ($('dlg').open || document.querySelector('.cbox:not([hidden])')) return; loadFeed(); loadNotifCount(); }, 30000);
+  }
+}
+
+$('username').addEventListener('input', () => { $('username').value = $('username').value.replace(/\s+/g, '_').replace(/[^A-Za-z0-9_]/g, ''); });
+$('tabSignup').onclick = () => setMode('signup');
+$('tabLogin').onclick = () => setMode('login');
+$('authBtn').onclick = submitAuth;
+$('password').addEventListener('keydown', (e) => { if (e.key === 'Enter') submitAuth(); });
+$('postBtn').onclick = publish;
+$('body').addEventListener('input', () => { $('count').textContent = $('body').value.length + ' / 500'; });
+$('logoutBtn').onclick = () => sb.auth.signOut();
+
+fillSchools();
+applyLang();
+function setScope(v) {
+  scope = v;
+  feedLimit = 30;
+  $('tabFollowing').setAttribute('aria-selected', v === 'following');
+  $('tabAll').setAttribute('aria-selected', v === 'all');
+  $('tabSchool').setAttribute('aria-selected', v === 'school');
+  loadFeed();
+}
+$('tabAll').onclick = () => setScope('all');
+$('tabSchool').onclick = () => setScope('school');
+$('tabFollowing').onclick = () => setScope('following');
+$('forgotBtn').onclick = async () => {
+  const email = $('email').value.trim();
+  const msg = $('authMsg');
+  if (!email) return show(msg, 'Type your email above first, then tap Forgot password.');
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin });
+  show(msg, error ? error.message : 'Check your email for a link to reset your password.', !error);
+};
+function recoveryDlg() {
+  const input = el('input', { type: 'password', placeholder: 'New password (8+ characters)' });
+  const msg = el('div', { className: 'msg', hidden: true });
+  const go = el('button', { className: 'btn primary', type: 'button', textContent: 'Save new password' });
+  go.onclick = async () => {
+    if (input.value.length < 8) return show(msg, 'Use at least 8 characters.');
+    const { error } = await sb.auth.updateUser({ password: input.value });
+    if (error) return show(msg, error.message);
+    show(msg, 'Password updated. You are logged in.', true);
+  };
+  openDlg([el('h2', { textContent: 'Set a new password', style: 'margin-top:0' }), input, msg, el('p', {}, [go])]);
+}
+sb.auth.onAuthStateChange((event, session) => { render(session); if (event === 'PASSWORD_RECOVERY') recoveryDlg(); });
+sb.auth.getSession().then(({ data }) => render(data.session));
+</script>
+</body>
+</html>
